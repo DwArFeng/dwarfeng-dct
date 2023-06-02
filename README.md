@@ -55,28 +55,51 @@ DCT 是数据编码与传输（Data Coding and Transmission）的缩写。总体
 
 1. Subgrade 架构支持。
 2. 数据采用统一接口定义，支持不同实现。
-3. 支持编码/解码常见的基本类型，同时支持用户扩展。
+3. 支持编码/解码常见的基本类型。
 4. 编码/解码基于 `FastJson`，编码后的数据相对可读，且编码/解码速度快。
+5. 所有接口均有默认实现，使用简单，也可以自定义实现。
 
 运行 `src/test` 下的示例以观察全部特性。
 
-| 示例类名 | 说明 |
-|------|----|
-| 暂无   | 暂无 |
+| 示例类名               | 说明         |
+|--------------------|------------|
+| DataCodingExample  | 数据编码器的使用示例 |
+| ValueCodingExample | 值编码器的使用示例  |
 
 ## 值的类型支持
 
 `dwarfeng-dct` 项目支持的值的类型如下：
 
-| 类型名 | 说明  |
-|-----|-----|
-| 待补充 | 待补充 |
+| 类型名          | 前缀名          | 优先级 | 值编解码器类型                | 说明                       |
+|--------------|--------------|-----|------------------------|--------------------------|
+| BigDecimal   | big_decimal  | 正常  | BigDecimalValueCodec   |                          |
+| BigInteger   | big_integer  | 正常  | BigIntegerValueCodec   |                          |
+| Boolean      | boolean      | 正常  | BooleanValueCodec      |                          |
+| byte[]       | byte         | 正常  | ByteValueCodec         | 不支持 Byte[]，使用 Base64 编码  |
+| Byte         | byte         | 正常  | ByteValueCodec         |                          |
+| Character    | character    | 正常  | CalendarValueCodec     |                          |
+| Date         | date         | 正常  | CalendarValueCodec     | 将 Date 序列化为时间戳           |
+| Double       | double       | 正常  | DoubleValueCodec       |                          |
+| Float        | float        | 正常  | FloatValueCodec        |                          |
+| Integer      | integer      | 正常  | IntegerValueCodec      |                          |
+| Long         | long         | 正常  | LongValueCodec         |                          |
+| Short        | short        | 正常  | ShortValueCodec        |                          |
+| String       | string       | 正常  | StringValueCodec       |                          |
+| Serializable | serializable | 正常  | SerializableValueCodec | 几乎支持任何可序列化的对象，但不可读，应最后考虑 |
 
 ## 安装说明
 
 1. 下载源码。
 
-   待补充。
+    - 使用 git 进行源码下载。
+       ```
+       git clone git@github.com:DwArFeng/dwarfeng-ftp.git
+       ```
+
+    - 对于中国用户，可以使用 gitee 进行高速下载。
+       ```
+       git clone git@gitee.com:dwarfeng/dwarfeng-ftp.git
+       ```
 
 2. 项目安装。
 
@@ -85,7 +108,18 @@ DCT 是数据编码与传输（Data Coding and Transmission）的缩写。总体
    mvn clean source:jar install
    ```
 
-3. enjoy it
+3. 项目引入。
+
+   在项目的 pom.xml 中添加如下依赖：
+   ```xml
+   <dependency>
+       <groupId>com.dwarfeng</groupId>
+       <artifactId>dwarfeng-dct</artifactId>
+       <version>${dwarfeng-dct.version}</version>
+   </dependency>
+   ```
+   
+4. enjoy it.
 
 ---
 
@@ -94,10 +128,60 @@ DCT 是数据编码与传输（Data Coding and Transmission）的缩写。总体
 1. 运行 `src/test` 下的 `Example` 以观察全部特性。
 2. 观察项目结构，将其中的配置运用到其它的 subgrade 项目中。
 
-### 单例模式
+### 简单配置
 
-待补充。
+加载 `com.dwarfeng.dct.config.SimpleDctConfig` 类，即可简单地获得单例模式的 `DataCodingHandler` 和 `ValueCodingHandler`。
+在项目的 `application-context-scan.xml` 中追加 `com.dwarfeng.dct.configuration` 包中全部 bean 的扫描，示例如下:
 
-### 多实例模式
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress SpringFacetInspection -->
+<beans
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd"
+>
 
-待补充。
+    <!-- 扫描 configuration 包中的全部 bean。 -->
+    <context:component-scan base-package="com.dwarfeng.dct.configuration"/>
+</beans>
+```
+
+或者只扫描 `com.dwarfeng.dct.configuration` 包中的 `SimpleConfiguration`，示例如下:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress SpringFacetInspection -->
+<beans
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd"
+>
+
+    <!-- 扫描 configuration 包中的 SimpleConfiguration -->
+    <context:component-scan base-package="com.dwarfeng.dct.configuration" use-default-filters="false">
+        <context:include-filter
+                type="assignable"
+                expression="com.dwarfeng.dct.configuration.SimpleConfiguration"
+        />
+    </context:component-scan>
+</beans>
+```
+
+### 自定义配置
+
+自定义配置较为灵活，可以在项目中的 `bean-definition.xml` 中追加配置，也可以自定义配置类。
+自定义配置适用于以下场景：
+
+1. 非单例模式的 `DataCodingHandler` 和 `ValueCodingHandler`。
+2. 需要自定义 `FlatDataCodec` 和 `ValueCodec` 的实现。
+
+由于自定义配置较为灵活，因此在此不做过多介绍，请开发者自行编写配置。

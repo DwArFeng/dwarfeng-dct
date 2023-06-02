@@ -91,7 +91,6 @@
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>dutil-basic</artifactId>
                 <version>${dutil.version}</version>
-                <scope>test</scope>
             </dependency>
             <!-- Subgrade 组件 -->
             <dependency>
@@ -309,7 +308,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <scope>test</scope>
         </dependency>
         <!-- Spring -->
         <dependency>
