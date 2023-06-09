@@ -1,7 +1,5 @@
 package com.dwarfeng.dct.exception;
 
-import com.dwarfeng.dct.handler.ValueCodec;
-
 /**
  * 值编码解码器异常。
  *
@@ -10,21 +8,17 @@ import com.dwarfeng.dct.handler.ValueCodec;
  */
 public class ValueCodecException extends DctException {
 
-    private static final long serialVersionUID = 4032012735560259873L;
+    private static final long serialVersionUID = 4252580031868921595L;
 
-    protected final ValueCodec codec;
-
-    public ValueCodecException(ValueCodec codec) {
-        this.codec = codec;
+    public ValueCodecException() {
     }
 
-    public ValueCodecException(Throwable cause, ValueCodec codec) {
+    public ValueCodecException(Throwable cause) {
         super(cause);
-        this.codec = codec;
     }
 
     @Override
     public String getMessage() {
-        return "值编解码器异常: " + codec;
+        return "值编解码器异常";
     }
 }

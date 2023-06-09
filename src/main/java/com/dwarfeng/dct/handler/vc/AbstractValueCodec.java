@@ -1,6 +1,8 @@
 package com.dwarfeng.dct.handler.vc;
 
 import com.dwarfeng.dct.exception.DctException;
+import com.dwarfeng.dct.exception.ValueCodecDecodeException;
+import com.dwarfeng.dct.exception.ValueCodecEncodeException;
 import com.dwarfeng.dct.handler.ValueCodec;
 import com.dwarfeng.subgrade.stack.exception.HandlerException;
 
@@ -49,7 +51,7 @@ public abstract class AbstractValueCodec implements ValueCodec {
         } catch (DctException e) {
             throw e;
         } catch (Exception e) {
-            throw new DctException(e);
+            throw new ValueCodecEncodeException(e, target);
         }
     }
 
@@ -59,6 +61,7 @@ public abstract class AbstractValueCodec implements ValueCodec {
      * @param target 指定的目标对象。
      * @return 编码后的文本。
      * @throws Exception 任何可能的异常。
+     * @see ValueCodec#encode(Object)
      */
     @Nonnull
     protected abstract String doEncode(@Nonnull Object target) throws Exception;
@@ -71,7 +74,7 @@ public abstract class AbstractValueCodec implements ValueCodec {
         } catch (DctException e) {
             throw e;
         } catch (Exception e) {
-            throw new DctException(e);
+            throw new ValueCodecDecodeException(e, text);
         }
     }
 
@@ -81,6 +84,7 @@ public abstract class AbstractValueCodec implements ValueCodec {
      * @param text 指定的文本。
      * @return 解码后的对象。
      * @throws Exception 任何可能的异常。
+     * @see ValueCodec#decode(String)
      */
     @Nonnull
     protected abstract Object doDecode(@Nonnull String text) throws Exception;

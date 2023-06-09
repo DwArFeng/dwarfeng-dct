@@ -1,7 +1,5 @@
 package com.dwarfeng.dct.exception;
 
-import com.dwarfeng.dct.handler.FlatDataCodec;
-
 /**
  * 扁平数据编解码器异常。
  *
@@ -10,21 +8,17 @@ import com.dwarfeng.dct.handler.FlatDataCodec;
  */
 public class FlatDataCodecException extends DctException {
 
-    private static final long serialVersionUID = -4737979205008787683L;
+    private static final long serialVersionUID = 2319576608361757700L;
 
-    protected final FlatDataCodec codec;
-
-    public FlatDataCodecException(FlatDataCodec codec) {
-        this.codec = codec;
+    public FlatDataCodecException() {
     }
 
-    public FlatDataCodecException(Throwable cause, FlatDataCodec codec) {
+    public FlatDataCodecException(Throwable cause) {
         super(cause);
-        this.codec = codec;
     }
 
     @Override
     public String getMessage() {
-        return "扁平数据编解码器异常: " + codec;
+        return "扁平数据编解码器异常";
     }
 }
