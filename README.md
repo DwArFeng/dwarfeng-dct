@@ -187,3 +187,139 @@ DCT 是数据编码与传输（Data Coding and Transmission）的缩写。总体
 由于自定义配置较为灵活，因此在此不做过多介绍，请开发者自行编写配置。
 
 需要注意的是：`DataCodingHandler` 和 `ValueCodingHandler` 在使用之前需要调用 `init()` 方法进行初始化。
+
+---
+
+## 集成/二次开发
+
+### 说明
+
+`dwarfeng-dct` 项目支持通过集成/二次开发的方式扩展其功能，包括：
+
+1. 自定义扁平数据编解码器，将 `Data` 序列化为 `JSON` 以外的其它格式。
+2. 自定义值编解码器，扩展 `Data` 的值的支持类型。
+
+开发人员只需要在项目中引用 `dwarfeng-dct` 的依赖，即可进行集成/二次开发，无需额外的配置。
+
+### 自定义扁平数据编解码器
+
+#### 开发
+
+`dwarfeng-dct` 项目中的 `FlatDataCodec` 接口定义了扁平数据编解码器的基本功能，开发人员可以通过实现该接口，
+自定义扁平数据编解码器。扩展的编解码器可以将 `Data` 序列化为 `JSON` 以外的其它格式。
+
+建议在实现 `FlatDataCodec` 接口的同时，继承 `AbstractFlatDataCodec` 类，该类对通用的业务逻辑进行了封装，如异常处理等。
+继承 `AbstractFlatDataCodec` 类可以使开发人员更加专注于编解码业务的实现。
+
+```java
+import com.dwarfeng.dct.handler.fdc.AbstractFlatDataCodec;
+
+@SuppressWarnings("RedundantThrows")
+public class CustomFlatDataCodec extends AbstractFlatDataCodec {
+
+   @Override
+   protected String doEncode(FlatData target) throws Exception {
+      // 实现编码逻辑，而不需要关注异常处理。
+      return xxx;
+   }
+
+   @Override
+   protected FlatData doDecode(String text) throws Exception {
+      // 实现解码逻辑，而不需要关注异常处理。
+      return xxx;
+   }
+}
+```
+
+#### 使用
+
+在构造 `DataCodingHandlerImpl` 时，将自定义的 `FlatDataCodec` 作为 `DataCodingConfig` 中的配置项传入即可，使用 
+`DataCodingConfig.Builder` 可以使这一过程更加简单。
+
+```java
+import com.dwarfeng.dct.handler.DataCodingHandler;
+import com.dwarfeng.dct.handler.DataCodingHandlerImpl;
+import com.dwarfeng.dct.handler.ValueCodingHandler;
+import com.dwarfeng.dct.struct.DataCodingConfig;
+import org.springframework.context.annotation.Configuration;
+
+@SuppressWarnings({"SpringFacetCodeInspection", "RedundantSuppression"})
+@Configuration
+public class CustomConfiguration {
+
+    @Bean
+    public DataCodingHandler dataCodingHandler(ValueCodingHandler valueCodingHandler) {
+        // 开发人员自己实现的 FlatDataCodec。
+        CustomFlatDataCodec customFlatDataCodec = new CustomFlatDataCodec();
+        DataCodingConfig config = new DataCodingConfig.Builder()
+                .setFlatDataCodec(customFlatDataCodec)
+                .setValueCodingHandler(valueCodingHandler)
+                .build();
+        return new DataCodingHandlerImpl(config);
+    }
+}
+```
+
+### 自定义值编解码器
+
+#### 开发
+
+`dwarfeng-dct` 项目中的 `ValueCodec` 接口定义了值编解码器的基本功能，开发人员可以通过实现该接口，
+自定义值编解码器。扩展的编解码器可以扩展 `Data` 的值的支持类型。
+
+建议在实现 `ValueCodec` 接口的同时，继承 `AbstractValueCodec` 类，该类对通用的业务逻辑进行了封装，如异常处理等。
+继承 `AbstractValueCodec` 类可以使开发人员更加专注于编解码业务的实现。
+
+```java
+import com.dwarfeng.dct.handler.vc.AbstractValueCodec;
+
+import javax.annotation.Nonnull;
+
+@SuppressWarnings("RedundantThrows")
+public class CustomValueCodec extends AbstractValueCodec {
+
+    @Nonnull
+    @Override
+    protected String doEncode(@Nonnull Object target) throws Exception {
+        // 实现解码逻辑，而不需要关注异常处理。
+        return xxx;
+    }
+
+    @Nonnull
+    @Override
+    protected Object doDecode(@Nonnull String text) throws Exception {
+        // 实现解码逻辑，而不需要关注异常处理。
+        return xxx;
+    }
+}
+```
+
+#### 使用
+
+在构造 `ValueCodingHandlerImpl` 时，将自定义的 `ValueCodec` 作为 `ValueCodingConfig` 中的配置项传入即可，使用
+`ValueCodingConfig.Builder` 可以使这一过程更加简单。
+
+```java
+import com.dwarfeng.dct.handler.ValueCodingHandler;
+import com.dwarfeng.dct.handler.ValueCodingHandlerImpl;
+import com.dwarfeng.dct.struct.ValueCodingConfig;
+import org.springframework.context.annotation.Configuration;
+
+@SuppressWarnings({"SpringFacetCodeInspection", "RedundantSuppression"})
+@Configuration
+public class CustomConfiguration {
+
+   @Bean
+   public ValueCodingHandler valueCodingHandler() {
+      // 开发人员自己实现的 ValueCodec。
+      CustomValueCodec customValueCodec = new CustomValueCodec();
+      ValueCodingConfig config = new ValueCodingConfig.Builder()
+              .addCodec(someValueCodec1)
+              .addCodec(someValueCodec2)
+              .addCodec(someValueCodec3)
+              .addCodec(customValueCodec)
+              .build();
+      return new ValueCodingHandlerImpl(config);
+   }
+}
+```
