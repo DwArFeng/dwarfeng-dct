@@ -15,16 +15,6 @@ import javax.annotation.Nullable;
 public interface ValueCodingHandler extends Handler {
 
     /**
-     * 初始化处理器。
-     *
-     * <p>
-     * 该方法在使用处理器之前必须被调用，且如果多次调用该方法，只有第一次调用时有效。
-     *
-     * @throws HandlerException 处理器异常。
-     */
-    void init() throws HandlerException;
-
-    /**
      * 将指定的目标对象编码为文本。
      *
      * @param target 指定的目标对象。

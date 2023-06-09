@@ -53,35 +53,19 @@ public class ValueCodingHandlerImpl implements ValueCodingHandler {
 
     private final Lock lock = new ReentrantLock();
 
-    private boolean initFlag;
-
     public ValueCodingHandlerImpl(ValueCodingConfig config) {
         this.config = config;
+        init();
     }
 
-    @BehaviorAnalyse
-    @Override
-    public void init() throws HandlerException {
-        lock.lock();
-        try {
-            if (initFlag) {
-                return;
-            }
+    public void init() {
+        // 展开配置。
+        List<Class<?>> preCacheClasses = config.getPreCacheClasses();
+        List<String> preCachePrefixes = config.getPreCachePrefixes();
 
-            // 展开配置。
-            List<Class<?>> preCacheClasses = config.getPreCacheClasses();
-            List<String> preCachePrefixes = config.getPreCachePrefixes();
-
-            // 预缓存。
-            preCacheClasses.forEach(this::preCacheTargetClass);
-            preCachePrefixes.forEach(this::preCacheTextPrefix);
-
-            initFlag = true;
-        } catch (Exception e) {
-            throw new DctException(e);
-        } finally {
-            lock.unlock();
-        }
+        // 预缓存。
+        preCacheClasses.forEach(this::preCacheTargetClass);
+        preCachePrefixes.forEach(this::preCacheTextPrefix);
     }
 
     private void preCacheTargetClass(Class<?> targetClass) {

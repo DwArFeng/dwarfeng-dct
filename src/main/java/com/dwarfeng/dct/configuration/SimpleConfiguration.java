@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 )
 public class SimpleConfiguration {
 
-    @Bean(initMethod = "init")
+    @Bean
     public ValueCodingHandler valueCodingHandler(
             List<ValueCodec> valueCodecs
     ) {
@@ -54,7 +54,7 @@ public class SimpleConfiguration {
         return new ValueCodingHandlerImpl(config);
     }
 
-    @Bean(initMethod = "init")
+    @Bean
     public DataCodingHandler dataCodingHandler(
             @Qualifier("fastJsonFlatDataCodec") FlatDataCodec flatDataCodec,
             ValueCodingHandler valueCodingHandler

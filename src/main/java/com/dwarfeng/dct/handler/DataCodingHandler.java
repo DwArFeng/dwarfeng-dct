@@ -18,16 +18,6 @@ import javax.annotation.Nonnull;
 public interface DataCodingHandler extends Handler {
 
     /**
-     * 初始化处理器。
-     *
-     * <p>
-     * 该方法在使用处理器之前必须被调用，且如果多次调用该方法，只有第一次调用时有效。
-     *
-     * @throws HandlerException 处理器异常。
-     */
-    void init() throws HandlerException;
-
-    /**
      * 将指定的数据编码为文本。
      *
      * @param data 指定的数据。

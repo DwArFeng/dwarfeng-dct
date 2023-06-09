@@ -24,31 +24,8 @@ public class DataCodingHandlerImpl implements DataCodingHandler {
 
     private final Lock lock = new ReentrantLock();
 
-    private boolean initFlag;
-
     public DataCodingHandlerImpl(DataCodingConfig config) {
         this.config = config;
-    }
-
-    @BehaviorAnalyse
-    @Override
-    public void init() throws HandlerException {
-        lock.lock();
-        try {
-            if (initFlag) {
-                return;
-            }
-
-            config.getValueCodingHandler().init();
-
-            initFlag = true;
-        } catch (DctException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new DctException(e);
-        } finally {
-            lock.unlock();
-        }
     }
 
     @BehaviorAnalyse
