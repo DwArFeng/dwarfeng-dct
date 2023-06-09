@@ -52,7 +52,7 @@ public final class ValueCodingConfig {
                 '}';
     }
 
-    public static class Builder implements Buildable<ValueCodingConfig> {
+    public static final class Builder implements Buildable<ValueCodingConfig> {
 
         private final List<ValueCodec> codecs = new ArrayList<>();
         private final List<Class<?>> preCacheClasses = new ArrayList<>();

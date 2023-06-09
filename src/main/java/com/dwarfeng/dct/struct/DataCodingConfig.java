@@ -39,7 +39,7 @@ public final class DataCodingConfig {
                 '}';
     }
 
-    public static class Builder implements Buildable<DataCodingConfig> {
+    public static final class Builder implements Buildable<DataCodingConfig> {
 
         private FlatDataCodec flatDataCodec;
         private ValueCodingHandler valueCodingHandler;
