@@ -118,7 +118,7 @@ DCT 是数据编码与传输（Data Coding and Transmission）的缩写。总体
        <version>${dwarfeng-dct.version}</version>
    </dependency>
    ```
-   
+
 4. enjoy it.
 
 ---
@@ -185,3 +185,5 @@ DCT 是数据编码与传输（Data Coding and Transmission）的缩写。总体
 2. 需要自定义 `FlatDataCodec` 和 `ValueCodec` 的实现。
 
 由于自定义配置较为灵活，因此在此不做过多介绍，请开发者自行编写配置。
+
+需要注意的是：`DataCodingHandler` 和 `ValueCodingHandler` 在使用之前需要调用 `init()` 方法进行初始化。
