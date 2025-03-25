@@ -1,4 +1,4 @@
-package com.dwarfeng.ftp.example;
+package com.dwarfeng.dct.example;
 
 import com.dwarfeng.dct.handler.ValueCodingHandler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

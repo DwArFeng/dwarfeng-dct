@@ -1,4 +1,4 @@
-package com.dwarfeng.ftp.configuration;
+package com.dwarfeng.dct.configuration;
 
 import com.dwarfeng.subgrade.impl.exception.MapServiceExceptionMapper;
 import com.dwarfeng.subgrade.sdk.exception.ServiceExceptionHelper;
