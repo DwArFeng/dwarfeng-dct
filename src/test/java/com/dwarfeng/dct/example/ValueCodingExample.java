@@ -15,7 +15,8 @@ import java.util.*;
  */
 public final class ValueCodingExample {
 
-    @SuppressWarnings("SpellCheckingInspection")
+    // 为了保证代码的可读性，此处代码不做简化。
+    @SuppressWarnings({"SpellCheckingInspection", "ExtractMethodRecommender"})
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
                 "classpath:spring/application-context*.xml"
