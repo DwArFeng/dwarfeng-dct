@@ -4,6 +4,9 @@
 
 ### 功能构建
 
+- Wiki 编写。
+  - docs/wiki/zh_CN/InstallBySourceCode.md。
+
 - 优化部分文件的格式。
   - CHANGELOG.md。
 
