@@ -2,6 +2,7 @@ package com.dwarfeng.dct.util;
 
 import com.dwarfeng.dct.handler.ValueCodec;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -81,7 +82,7 @@ public final class ValueCodecUtil {
         if (StringUtils.containsWhitespace(valuePrefix)) {
             throw new IllegalArgumentException("值前缀不能包含空白字符");
         }
-        if (StringUtils.contains(valuePrefix, Constants.FLAT_DATA_VALUE_PREFIX_DELIMITER)) {
+        if (Strings.CS.contains(valuePrefix, Constants.FLAT_DATA_VALUE_PREFIX_DELIMITER)) {
             throw new IllegalArgumentException("值前缀不能包含 " + Constants.FLAT_DATA_VALUE_PREFIX_DELIMITER);
         }
     }
