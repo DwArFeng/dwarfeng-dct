@@ -5,6 +5,10 @@
 ### 功能构建
 
 - Wiki 编写。
+  - docs/wiki/zh-CN/FlatDataMechanism.md。
+  - docs/wiki/zh-CN/GeneralDataMechanism.md。
+
+- Wiki 编写。
   - docs/wiki/zh-CN/UsageGuide.md。
 
 - 更新 README.md。
