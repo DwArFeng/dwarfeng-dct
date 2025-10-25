@@ -4,6 +4,10 @@
 
 ### 功能构建
 
+- Wiki 编写。
+  - docs/wiki/zh-CN/FlatDataMechanism.md。
+  - docs/wiki/zh-CN/GeneralDataMechanism.md。
+
 - 依赖升级。
   - 升级 `subgrade` 依赖版本为 `1.7.0.a` 以规避漏洞。
 
