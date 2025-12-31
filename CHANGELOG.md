@@ -4,6 +4,11 @@
 
 ### 功能构建
 
+- Wiki 编写。
+  - docs/wiki/zh-CN/UsageGuide.md。
+
+- 更新 README.md。
+
 - Wiki 更新。
   - docs/wiki/en-US/README.md。
   - docs/wiki/zh-CN/README.md。
