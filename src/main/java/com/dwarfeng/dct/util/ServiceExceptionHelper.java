@@ -21,7 +21,7 @@ public final class ServiceExceptionHelper {
      * <p>
      * 该方法可以在配置类中快速的搭建目标映射。
      *
-     * @param map 指定的映射，允许为null。
+     * @param map 指定的映射，允许为 null。
      * @return 添加了默认目标的映射。
      */
     public static Map<Class<? extends Exception>, ServiceException.Code> putDefaultDestination(
