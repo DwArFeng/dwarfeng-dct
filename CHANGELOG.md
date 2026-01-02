@@ -7,6 +7,8 @@
 - 更新 README.md。
 
 - Wiki 更新。
+  - docs/wiki/zh-CN/FlatDataMechanism.md。
+  - docs/wiki/zh-CN/GeneralDataMechanism.md。
   - docs/wiki/zh-CN/Introduction.md。
   - docs/wiki/en-US/README.md。
   - docs/wiki/zh-CN/README.md。
