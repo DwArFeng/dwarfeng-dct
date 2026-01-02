@@ -20,3 +20,8 @@
 
 - [FlatData Mechanism](./FlatDataMechanism.md) - 扁平数据机制，介绍 FlatData 的核心概念、使用场景和编解码机制。
 - [GeneralData Mechanism](./GeneralDataMechanism.md) - 通用数据机制，介绍 GeneralData 的数据结构、支持的数据类型和值编解码机制。
+
+## 功能扩展
+
+- [Extend ValueCodec](./ExtendValueCodec.md) - 扩展 dwarfeng-dct 支持的对象类型，详细介绍如何通过实现 ValueCodec
+  接口来扩展支持的数据类型。
