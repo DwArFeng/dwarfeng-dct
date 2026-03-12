@@ -8,6 +8,10 @@
 
 - [Introduction](./Introduction.md) - 简介，与 `README.md` 基本相同。
 
+## 快速开始
+
+- [Quick Start](./QuickStart.md) - 快速开始，用最少的步骤体验 `dwarfeng-dct` 的数据编码与解码能力。
+
 ## 项目打包、安装、使用
 
 - [Install by Source Code](./InstallBySourceCode.md) - 通过源码安装本项目。
