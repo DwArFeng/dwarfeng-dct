@@ -1,7 +1,6 @@
 package com.dwarfeng.dct.handler.vc;
 
 import com.dwarfeng.dct.util.Constants;
-import org.springframework.context.annotation.ComponentScan;
 
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
@@ -12,7 +11,6 @@ import java.math.BigDecimal;
  * @author DwArFeng
  * @since 1.0.0
  */
-@ComponentScan
 public class BigDecimalValueCodec extends AbstractValueCodec {
 
     public BigDecimalValueCodec() {

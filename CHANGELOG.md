@@ -10,7 +10,8 @@
 
 ### Bug 修复
 
-- (无)
+- 修复部分类中错误的注解。
+  - com.dwarfeng.dct.handler.vc.BigDecimalValueCodec。
 
 ### 功能移除
 
