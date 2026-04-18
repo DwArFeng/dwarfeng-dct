@@ -38,7 +38,9 @@ public class DataCodingHandlerImpl implements DataCodingHandler {
             Object value = data.getValue();
             String flatValue = config.getValueCodingHandler().encode(value);
             // 构造 FlatData。
-            FlatData flatData = new FlatData(data.getPointKey(), flatValue, data.getHappenedDate());
+            FlatData flatData = new FlatData(
+                    data.getPointKey(), flatValue, data.getHappenedDate(), data.getHappenedDateNanoOffset()
+            );
             // 使用 FlatData 编解码器进行编码。
             return config.getFlatDataCodec().encode(flatData);
         } catch (DctException e) {
@@ -61,7 +63,9 @@ public class DataCodingHandlerImpl implements DataCodingHandler {
             // 使用值编解码器进行解码。
             Object value = config.getValueCodingHandler().decode(flatData.getValue());
             // 构造 Data。
-            return new GeneralData(flatData.getPointKey(), value, flatData.getHappenedDate());
+            return new GeneralData(
+                    flatData.getPointKey(), value, flatData.getHappenedDate(), flatData.getHappenedDateNanoOffset()
+            );
         } catch (DctException e) {
             throw e;
         } catch (Exception e) {

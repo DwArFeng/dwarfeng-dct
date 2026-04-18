@@ -62,7 +62,7 @@ public final class DataCodingExample {
                 exampleArrayList
         );
         List<GeneralData> generalDatas = objects.stream().map(
-                obj -> new GeneralData(new LongIdKey(12450L), obj, new Date(724608000000L))
+                obj -> new GeneralData(new LongIdKey(12450L), obj, new Date(724608000000L), 123456)
         ).collect(Collectors.toList());
         for (GeneralData generalData : generalDatas) {
             System.out.println(generalData + " -> " + dataCodingHandler.encode(generalData));
@@ -78,18 +78,26 @@ public final class DataCodingExample {
         System.out.println();
         List<String> strings = Arrays.asList(
                 "{\"point_key\":{\"long_id\":12450},\"value\":\"integer:12\",\"happened_date\":724608000000}",
-                "{\"point_key\":{\"long_id\":12450},\"value\":\"long:34\",\"happened_date\":724608000000}",
-                "{\"point_key\":{\"long_id\":12450},\"value\":\"float:56.78\",\"happened_date\":724608000000}",
-                "{\"point_key\":{\"long_id\":12450},\"value\":\"double:90.12\",\"happened_date\":724608000000}",
-                "{\"point_key\":{\"long_id\":12450},\"value\":\"string:foobar\",\"happened_date\":724608000000}",
-                "{\"point_key\":{\"long_id\":12450},\"value\":\"date:724608000000\",\"happened_date\":724608000000}",
-                "{\"point_key\":{\"long_id\":12450},\"value\":\"byte_array:AQIDBAU=\",\"happened_date\":724608000000}",
-                "{\"point_key\":{\"long_id\":12450},\"value\":\"big_integer:12450\",\"happened_date\":724608000000}",
-                "{\"point_key\":{\"long_id\":12450},\"value\":\"big_decimal:3.14159\",\"happened_date\":724608000000}",
+                "{\"point_key\":{\"long_id\":12450},\"value\":\"long:34\",\"happened_date\":724608000000," +
+                        "\"happened_date_nano_offset\":123456}",
+                "{\"point_key\":{\"long_id\":12450},\"value\":\"float:56.78\",\"happened_date\":724608000000," +
+                        "\"happened_date_nano_offset\":123456}",
+                "{\"point_key\":{\"long_id\":12450},\"value\":\"double:90.12\",\"happened_date\":724608000000," +
+                        "\"happened_date_nano_offset\":123456}",
+                "{\"point_key\":{\"long_id\":12450},\"value\":\"string:foobar\",\"happened_date\":724608000000," +
+                        "\"happened_date_nano_offset\":123456}",
+                "{\"point_key\":{\"long_id\":12450},\"value\":\"date:724608000000\",\"happened_date\":724608000000," +
+                        "\"happened_date_nano_offset\":123456}",
+                "{\"point_key\":{\"long_id\":12450},\"value\":\"byte_array:AQIDBAU=\",\"happened_date\":724608000000," +
+                        "\"happened_date_nano_offset\":123456}",
+                "{\"point_key\":{\"long_id\":12450},\"value\":\"big_integer:12450\",\"happened_date\":724608000000," +
+                        "\"happened_date_nano_offset\":123456}",
+                "{\"point_key\":{\"long_id\":12450},\"value\":\"big_decimal:3.14159\",\"happened_date\":724608000000," +
+                        "\"happened_date_nano_offset\":123456}",
                 "{\"point_key\":{\"long_id\":12450},\"value\":\"serializable:rO0ABXNyABNqYXZhLnV0aWwuQXJyYXlMaXN0eIH" +
                         "SHZnHYZ0DAAFJAARzaXpleHAAAAAFdwQAAAAFc3IAEWphdmEubGFuZy5JbnRlZ2VyEuKgpPeBhzgCAAFJAAV2YWx1ZX" +
                         "hyABBqYXZhLmxhbmcuTnVtYmVyhqyVHQuU4IsCAAB4cAAAAAFzcQB+AAIAAAACc3EAfgACAAAAA3NxAH4AAgAAAARzc" +
-                        "QB+AAIAAAAFeA==\",\"happened_date\":724608000000}"
+                        "QB+AAIAAAAFeA==\",\"happened_date\":724608000000,\"happened_date_nano_offset\":123456}"
         );
         for (String string : strings) {
             System.out.println(string + " -> " + dataCodingHandler.decode(string));

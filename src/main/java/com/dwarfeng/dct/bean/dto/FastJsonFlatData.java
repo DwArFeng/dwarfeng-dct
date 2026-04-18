@@ -15,7 +15,7 @@ import java.util.Objects;
  */
 public class FastJsonFlatData implements Dto {
 
-    private static final long serialVersionUID = 1853419362259735561L;
+    private static final long serialVersionUID = 8270361087891896470L;
 
     public static FastJsonFlatData of(FlatData flatData) {
         if (Objects.isNull(flatData)) {
@@ -24,7 +24,8 @@ public class FastJsonFlatData implements Dto {
             return new FastJsonFlatData(
                     FastJsonLongIdKey.of(flatData.getPointKey()),
                     flatData.getValue(),
-                    flatData.getHappenedDate()
+                    flatData.getHappenedDate(),
+                    flatData.getHappenedDateNanoOffset()
             );
         }
     }
@@ -36,7 +37,8 @@ public class FastJsonFlatData implements Dto {
             return new FlatData(
                     FastJsonLongIdKey.toStackBean(fastJsonFlatData.getPointKey()),
                     fastJsonFlatData.getValue(),
-                    fastJsonFlatData.getHappenedDate()
+                    fastJsonFlatData.getHappenedDate(),
+                    fastJsonFlatData.getHappenedDateNanoOffset()
             );
         }
     }
@@ -50,13 +52,21 @@ public class FastJsonFlatData implements Dto {
     @JSONField(name = "happened_date", ordinal = 3)
     private Date happenedDate;
 
+    @JSONField(name = "happened_date_nano_offset", ordinal = 4)
+    private int happenedDateNanoOffset;
+
     public FastJsonFlatData() {
     }
 
     public FastJsonFlatData(FastJsonLongIdKey pointKey, String value, Date happenedDate) {
+        this(pointKey, value, happenedDate, 0);
+    }
+
+    public FastJsonFlatData(FastJsonLongIdKey pointKey, String value, Date happenedDate, int happenedDateNanoOffset) {
         this.pointKey = pointKey;
         this.value = value;
         this.happenedDate = happenedDate;
+        this.happenedDateNanoOffset = happenedDateNanoOffset;
     }
 
     public FastJsonLongIdKey getPointKey() {
@@ -83,6 +93,14 @@ public class FastJsonFlatData implements Dto {
         this.happenedDate = happenedDate;
     }
 
+    public int getHappenedDateNanoOffset() {
+        return happenedDateNanoOffset;
+    }
+
+    public void setHappenedDateNanoOffset(int happenedDateNanoOffset) {
+        this.happenedDateNanoOffset = happenedDateNanoOffset;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -92,7 +110,8 @@ public class FastJsonFlatData implements Dto {
 
         if (!Objects.equals(pointKey, that.pointKey)) return false;
         if (!Objects.equals(value, that.value)) return false;
-        return Objects.equals(happenedDate, that.happenedDate);
+        if (!Objects.equals(happenedDate, that.happenedDate)) return false;
+        return happenedDateNanoOffset == that.happenedDateNanoOffset;
     }
 
     @Override
@@ -100,6 +119,7 @@ public class FastJsonFlatData implements Dto {
         int result = pointKey != null ? pointKey.hashCode() : 0;
         result = 31 * result + (value != null ? value.hashCode() : 0);
         result = 31 * result + (happenedDate != null ? happenedDate.hashCode() : 0);
+        result = 31 * result + happenedDateNanoOffset;
         return result;
     }
 
@@ -109,6 +129,7 @@ public class FastJsonFlatData implements Dto {
                 "pointKey=" + pointKey +
                 ", value='" + value + '\'' +
                 ", happenedDate=" + happenedDate +
+                ", happenedDateNanoOffset=" + happenedDateNanoOffset +
                 '}';
     }
 }

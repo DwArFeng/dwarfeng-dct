@@ -20,19 +20,25 @@ import java.util.Objects;
  */
 public class GeneralData implements Dto, Data {
 
-    private static final long serialVersionUID = 2092528935998733781L;
+    private static final long serialVersionUID = 1426650154006805507L;
 
     private LongIdKey pointKey;
     private Object value;
     private Date happenedDate;
+    private int happenedDateNanoOffset;
 
     public GeneralData() {
     }
 
     public GeneralData(LongIdKey pointKey, Object value, Date happenedDate) {
+        this(pointKey, value, happenedDate, 0);
+    }
+
+    public GeneralData(LongIdKey pointKey, Object value, Date happenedDate, int happenedDateNanoOffset) {
         this.pointKey = pointKey;
         this.value = value;
         this.happenedDate = happenedDate;
+        this.happenedDateNanoOffset = happenedDateNanoOffset;
     }
 
     @Nonnull
@@ -66,6 +72,15 @@ public class GeneralData implements Dto, Data {
     }
 
     @Override
+    public int getHappenedDateNanoOffset() {
+        return happenedDateNanoOffset;
+    }
+
+    public void setHappenedDateNanoOffset(int happenedDateNanoOffset) {
+        this.happenedDateNanoOffset = happenedDateNanoOffset;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -74,7 +89,8 @@ public class GeneralData implements Dto, Data {
 
         if (!Objects.equals(pointKey, that.pointKey)) return false;
         if (!Objects.equals(value, that.value)) return false;
-        return Objects.equals(happenedDate, that.happenedDate);
+        if (!Objects.equals(happenedDate, that.happenedDate)) return false;
+        return happenedDateNanoOffset == that.happenedDateNanoOffset;
     }
 
     @Override
@@ -82,6 +98,7 @@ public class GeneralData implements Dto, Data {
         int result = pointKey != null ? pointKey.hashCode() : 0;
         result = 31 * result + (value != null ? value.hashCode() : 0);
         result = 31 * result + (happenedDate != null ? happenedDate.hashCode() : 0);
+        result = 31 * result + happenedDateNanoOffset;
         return result;
     }
 
@@ -91,6 +108,7 @@ public class GeneralData implements Dto, Data {
                 "pointKey=" + pointKey +
                 ", value=" + value +
                 ", happenedDate=" + happenedDate +
+                ", happenedDateNanoOffset=" + happenedDateNanoOffset +
                 '}';
     }
 }

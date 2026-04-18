@@ -4,6 +4,16 @@
 
 ### 功能构建
 
+- 增强数据时间精度支持。
+  - 增加 `com.dwarfeng.dct.bean.dto.FastJsonFlatData.happenedDateNanoOffset` 字段。
+  - 增加 `com.dwarfeng.dct.bean.dto.FlatData.happenedDateNanoOffset` 字段。
+  - 增加 `com.dwarfeng.dct.bean.dto.GeneralData.happenedDateNanoOffset` 字段。
+  - 增加 `com.dwarfeng.dct.struct.Data.getHappenedDateNanoOffset()` 接口方法。
+  - 新增 `com.dwarfeng.dct.util.DataUtil` 工具类，为相应的对象提供时间操作工具。
+  - 新增 `com.dwarfeng.dct.util.FlatDataUtil` 工具类，为相应的对象提供时间操作工具。
+  - 新增 `com.dwarfeng.dct.util.GeneralDataUtil` 工具类，为相应的对象提供时间操作工具。
+  - 调整相关处理器的处理逻辑，以支持纳秒偏移量的传递。
+
 - 依赖升级。
   - 升级 `log4j2` 依赖版本为 `2.25.4` 以规避漏洞。
   - 升级 `dutil` 依赖版本为 `0.4.2.a-beta` 以规避漏洞。

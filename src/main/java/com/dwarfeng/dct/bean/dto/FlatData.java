@@ -26,19 +26,25 @@ import java.util.Objects;
  */
 public class FlatData implements Dto {
 
-    private static final long serialVersionUID = -8552570128924976374L;
+    private static final long serialVersionUID = 312869087364583801L;
 
     private LongIdKey pointKey;
     private String value;
     private Date happenedDate;
+    private int happenedDateNanoOffset;
 
     public FlatData() {
     }
 
     public FlatData(LongIdKey pointKey, String value, Date happenedDate) {
+        this(pointKey, value, happenedDate, 0);
+    }
+
+    public FlatData(LongIdKey pointKey, String value, Date happenedDate, int happenedDateNanoOffset) {
         this.pointKey = pointKey;
         this.value = value;
         this.happenedDate = happenedDate;
+        this.happenedDateNanoOffset = happenedDateNanoOffset;
     }
 
     public LongIdKey getPointKey() {
@@ -65,6 +71,14 @@ public class FlatData implements Dto {
         this.happenedDate = happenedDate;
     }
 
+    public int getHappenedDateNanoOffset() {
+        return happenedDateNanoOffset;
+    }
+
+    public void setHappenedDateNanoOffset(int happenedDateNanoOffset) {
+        this.happenedDateNanoOffset = happenedDateNanoOffset;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,7 +88,8 @@ public class FlatData implements Dto {
 
         if (!Objects.equals(pointKey, flatData.pointKey)) return false;
         if (!Objects.equals(value, flatData.value)) return false;
-        return Objects.equals(happenedDate, flatData.happenedDate);
+        if (!Objects.equals(happenedDate, flatData.happenedDate)) return false;
+        return happenedDateNanoOffset == flatData.happenedDateNanoOffset;
     }
 
     @Override
@@ -82,6 +97,7 @@ public class FlatData implements Dto {
         int result = pointKey != null ? pointKey.hashCode() : 0;
         result = 31 * result + (value != null ? value.hashCode() : 0);
         result = 31 * result + (happenedDate != null ? happenedDate.hashCode() : 0);
+        result = 31 * result + happenedDateNanoOffset;
         return result;
     }
 
@@ -91,6 +107,7 @@ public class FlatData implements Dto {
                 "pointKey=" + pointKey +
                 ", value='" + value + '\'' +
                 ", happenedDate=" + happenedDate +
+                ", happenedDateNanoOffset=" + happenedDateNanoOffset +
                 '}';
     }
 }

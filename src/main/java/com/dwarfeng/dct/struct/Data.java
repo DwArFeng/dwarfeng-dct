@@ -48,4 +48,11 @@ public interface Data {
      */
     @Nonnull
     Date getHappenedDate();
+
+    /**
+     * 获取数据发生时间在毫秒内的纳秒偏移。
+     *
+     * @return 数据发生时间在毫秒内的纳秒偏移。
+     */
+    int getHappenedDateNanoOffset();
 }
