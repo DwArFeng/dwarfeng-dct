@@ -4,6 +4,17 @@
 
 ### 功能构建
 
+- 修改单元测试代码。
+  - com.dwarfeng.dct.util.CompareUtilTest。
+
+- 新增单元测试代码。
+  - com.dwarfeng.dct.util.ValueCodecUtilTest。
+  - com.dwarfeng.dct.util.FlatDataUtilTest。
+  - com.dwarfeng.dct.util.DataUtilTest。
+  - com.dwarfeng.dct.handler.DataCodingHandlerImplTest。
+  - com.dwarfeng.dct.util.FlatDataCodecUtilTest。
+  - com.dwarfeng.dct.util.GeneralDataUtilTest。
+
 - 增加部分工具类的功能。
   - com.dwarfeng.dct.util.FlatDataUtil。
   - com.dwarfeng.dct.util.GeneralDataUtil。
@@ -17,7 +28,8 @@
 
 ### 功能移除
 
-- (无)
+- 删除单元测试代码。
+  - com.dwarfeng.dct.util.DataCodingNanoPrecisionTest。
 
 ---
 

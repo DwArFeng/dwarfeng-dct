@@ -7,20 +7,16 @@ import com.dwarfeng.dutil.basic.time.TimeUtil;
 import com.dwarfeng.subgrade.stack.bean.key.LongIdKey;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.Date;
 
-/**
- * {@link CompareUtil} 的单元测试。
- *
- * <p>
- * 测试方法顺序与 {@link CompareUtil} 中比较器声明顺序一致。
- *
- * @author DwArFeng
- * @since 2.0.0
- */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:spring/application-context*.xml")
 public class CompareUtilTest {
 
     private static final LongIdKey KEY_1 = new LongIdKey(1L);
