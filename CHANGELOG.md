@@ -4,6 +4,10 @@
 
 ### 功能构建
 
+- 增加部分工具类的功能。
+  - com.dwarfeng.dct.util.FlatDataUtil。
+  - com.dwarfeng.dct.util.GeneralDataUtil。
+
 - 增加依赖。
   - 增加依赖 `spring-test` 以应用其新功能，版本为 `5.3.39`。
 

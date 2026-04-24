@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.time.Instant;
-import java.util.Date;
 
 /**
  * 数据编码纳秒精度测试。
@@ -28,8 +27,9 @@ public class DataCodingNanoPrecisionTest {
                 "classpath:spring/application-context*.xml"
         )) {
             DataCodingHandler dataCodingHandler = ctx.getBean(DataCodingHandler.class);
-            GeneralData generalData = new GeneralData(new LongIdKey(12450L), "foobar", new Date(724608000000L));
-            GeneralDataUtil.setHappenedInstant(generalData, Instant.ofEpochMilli(724608000000L).plusNanos(123456L));
+            GeneralData generalData = GeneralDataUtil.newInstance(
+                    new LongIdKey(12450L), "foobar", Instant.ofEpochMilli(724608000000L).plusNanos(123456L)
+            );
 
             String encoded = dataCodingHandler.encode(generalData);
             Data decoded = dataCodingHandler.decode(encoded);
@@ -57,13 +57,17 @@ public class DataCodingNanoPrecisionTest {
 
     @Test
     public void testGeneralDataTimeUtilInstantRoundTrip() {
-        GeneralData generalData = new GeneralData(new LongIdKey(12450L), "foobar", new Date(724608000000L));
         Instant expected = Instant.ofEpochMilli(724608000000L).plusNanos(TimeUtil.MAX_NANO_OFFSET);
+        GeneralData generalData = GeneralDataUtil.newInstance(new LongIdKey(12450L), "foobar", expected);
 
-        GeneralDataUtil.setHappenedInstant(generalData, expected);
         Instant actual = GeneralDataUtil.getHappenedInstant(generalData);
 
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGeneralDataNewInstanceNullInstant() {
+        GeneralDataUtil.newInstance(new LongIdKey(12450L), "foobar", null);
     }
 
     @Test(expected = NullPointerException.class)
@@ -73,12 +77,16 @@ public class DataCodingNanoPrecisionTest {
 
     @Test
     public void testFlatDataTimeUtilInstantRoundTrip() {
-        FlatData flatData = new FlatData(new LongIdKey(12450L), "string:foobar", new Date(724608000000L));
         Instant expected = Instant.ofEpochMilli(724608000000L).plusNanos(654321L);
+        FlatData flatData = FlatDataUtil.newInstance(new LongIdKey(12450L), "string:foobar", expected);
 
-        FlatDataUtil.setHappenedInstant(flatData, expected);
         Instant actual = FlatDataUtil.getHappenedInstant(flatData);
 
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testFlatDataNewInstanceNullInstant() {
+        FlatDataUtil.newInstance(new LongIdKey(12450L), "string:foobar", null);
     }
 }
