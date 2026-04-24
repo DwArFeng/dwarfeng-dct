@@ -47,6 +47,68 @@ public class FlatData implements Dto {
 }
 ```
 
+## 时间精度模型
+
+### 字段语义
+
+`FlatData` 使用以下组合表达高精度发生时间：
+
+- `happenedDate`：毫秒级基准时间。
+- `happenedDateNanoOffset`：该毫秒内的纳秒偏移量，范围为 `0 ~ 999999`。
+
+完整瞬时时间由二者共同决定。推荐通过工具类对 `FlatData` 进行 `Instant` 操作。
+
+## 数据工具类
+
+### Instant 工厂构造
+
+推荐优先使用 `FlatDataUtil.newInstance(LongIdKey pointKey, String value, Instant happenedInstant)` 构造对象，
+避免手工分拆时间字段导致语义偏差。
+
+```java
+import com.dwarfeng.dct.bean.dto.FlatData;
+import com.dwarfeng.dct.util.FlatDataUtil;
+import com.dwarfeng.subgrade.stack.bean.key.LongIdKey;
+
+import java.time.Instant;
+
+public class Example {
+
+    public FlatData buildFlatData() {
+        LongIdKey pointKey = new LongIdKey(12450L);
+        String value = "integer:42";
+        Instant happenedInstant = Instant.parse("2026-04-24T10:30:12.123456789Z");
+
+        return FlatDataUtil.newInstance(pointKey, value, happenedInstant);
+    }
+}
+```
+
+### Instant 的 Getters 和 Setters
+
+推荐统一通过 `FlatDataUtil` 进行转换：
+
+- `FlatDataUtil.setHappenedInstant(...)`：根据 `Instant` 同步设置两个字段。
+- `FlatDataUtil.getHappenedInstant(...)`：由两个字段还原完整 `Instant`。
+
+```java
+import com.dwarfeng.dct.bean.dto.FlatData;
+import com.dwarfeng.dct.util.FlatDataUtil;
+
+import java.time.Instant;
+
+public class Example {
+
+    public Instant getHappenedInstant(FlatData flatData) {
+        return FlatDataUtil.getHappenedInstant(flatData);
+    }
+
+    public void setHappenedInstant(FlatData flatData, Instant happenedInstant) {
+        FlatDataUtil.setHappenedInstant(flatData, happenedInstant);
+    }
+}
+```
+
 ## 数据排序
 
 `CompareUtil` 为 `FlatData` 提供统一排序语义，推荐优先复用以下比较器：
@@ -189,6 +251,6 @@ public class CustomConfiguration {
 }
 ```
 
-## 参考
+## 参阅
 
 - [GeneralData 机制](./GeneralDataMechanism.md) - 通用数据机制，介绍 GeneralData 的数据结构、支持的数据类型和值编解码机制。

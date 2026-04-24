@@ -4,6 +4,10 @@
 
 ### 功能构建
 
+- Wiki 更新。
+  - docs/wiki/zh-CN/FlatDataMechanism.md。
+  - docs/wiki/zh-CN/GeneralDataMechanism.md。
+
 - 修改单元测试代码。
   - com.dwarfeng.dct.util.CompareUtilTest。
 

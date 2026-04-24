@@ -68,11 +68,14 @@ public class GeneralData implements Dto, Data {
 - `happenedDate`：毫秒级基准时间。
 - `happenedDateNanoOffset`：该毫秒内的纳秒偏移量，范围为 `0 ~ 999999`。
 
-完整瞬时时间由二者共同决定。推荐通过工具类在 `GeneralData` 与 `Instant` 之间进行转换。
+完整瞬时时间由二者共同决定。推荐通过工具类对 `FlatData` 进行 `Instant` 操作。
 
-### Instant 转换
+## 数据工具类
 
-推荐使用 `GeneralDataUtil` 的方法统一处理时间字段：
+### Instant 工厂构造
+
+推荐优先使用 `GeneralDataUtil.newInstance(LongIdKey pointKey, Object value, Instant happenedInstant)` 创建对象，
+避免手工分拆时间字段导致语义偏差。
 
 ```java
 import com.dwarfeng.dct.bean.dto.GeneralData;
@@ -80,29 +83,43 @@ import com.dwarfeng.dct.util.GeneralDataUtil;
 import com.dwarfeng.subgrade.stack.bean.key.LongIdKey;
 
 import java.time.Instant;
-import java.util.Date;
 
 public class Example {
 
-    public void happenedInstantExample() {
-        GeneralData generalData = new GeneralData(new LongIdKey(12450L), 42, new Date());
-        Instant happenedInstant = Instant.parse("2026-04-17T08:30:12.123456789Z");
+    public GeneralData buildGeneralData() {
+        LongIdKey pointKey = new LongIdKey(12450L);
+        Object value = 42;
+        Instant happenedInstant = Instant.parse("2026-04-24T10:30:12.123456789Z");
 
-        // 写入：同步设置 happenedDate 与 happenedDateNanoOffset。
-        GeneralDataUtil.setHappenedInstant(generalData, happenedInstant);
-
-        // 读取：由 happenedDate + happenedDateNanoOffset 还原 Instant。
-        Instant restoredInstant = GeneralDataUtil.getHappenedInstant(generalData);
-        System.out.println("Restored Instant: " + restoredInstant);
+        return GeneralDataUtil.newInstance(pointKey, value, happenedInstant);
     }
 }
 ```
 
-`GeneralDataUtil` 在转换时会执行参数校验：
+### Instant 的 Getters 和 Setters
 
-- 对对象和时间字段执行 `null` 检查。
-- 对 `happenedDateNanoOffset` 使用 `TimeUtil.checkNanoOffset(...)` 校验范围。
-- 参数不合法时抛出 `NullPointerException` 或 `IllegalArgumentException`。
+推荐统一通过 `GeneralDataUtil` 进行转换：
+
+- `GeneralDataUtil.setHappenedInstant(...)`：根据 `Instant` 同步设置两个字段。
+- `GeneralDataUtil.getHappenedInstant(...)`：由两个字段还原完整 `Instant`。
+
+```java
+import com.dwarfeng.dct.bean.dto.GeneralData;
+import com.dwarfeng.dct.util.GeneralDataUtil;
+
+import java.time.Instant;
+
+public class Example {
+
+    public Instant getHappenedInstant(GeneralData generalData) {
+        return GeneralDataUtil.getHappenedInstant(generalData);
+    }
+
+    public void setHappenedInstant(GeneralData generalData, Instant happenedInstant) {
+        GeneralDataUtil.setHappenedInstant(generalData, happenedInstant);
+    }
+}
+```
 
 ## 数据排序
 
@@ -226,6 +243,6 @@ public class CustomConfiguration {
 }
 ```
 
-## 参考
+## 参阅
 
 - [FlatData 机制](./FlatDataMechanism.md) - 扁平数据机制，介绍 FlatData 的核心概念、使用场景和编解码机制。
