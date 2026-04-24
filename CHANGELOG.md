@@ -4,6 +4,11 @@
 
 ### 功能构建
 
+- Wiki 更新。
+  - docs/wiki/zh-CN/FlatDataMechanism.md。
+  - docs/wiki/zh-CN/GeneralDataMechanism.md。
+  - docs/wiki/zh-CN/QuickStart.md。
+
 - 新增工具类。
   - com.dwarfeng.dct.util.CompareUtil。
 

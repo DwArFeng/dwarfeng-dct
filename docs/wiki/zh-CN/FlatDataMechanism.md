@@ -5,18 +5,19 @@
 `FlatData`（扁平数据）是 `dwarfeng-dct` 项目中的核心数据结构，用于表示将复杂数据对象转换为文本格式后的数据。
 它是数据编码处理过程中的重要中间格式，特别适用于消息队列传输和数据库存储场景。
 
-扁平数据包含三个核心属性：点位主键、数据值和发生时间。
+扁平数据包含四个核心属性：点位主键、数据值、发生时间和毫秒内纳秒偏移。
 数据值采用 `prefix:flat_value` 格式，其中前缀标识数据类型，扁平值部分包含实际的文本数据。
 
 ## 核心概念
 
 ### 什么是扁平数据
 
-扁平数据是指将 `Data.getValue()` 中的数据转换为文本后的数据。扁平数据包含以下三个核心属性：
+扁平数据是指将 `Data.getValue()` 中的数据转换为文本后的数据。扁平数据包含以下四个核心属性：
 
 - **点位主键** (`pointKey`): 标识数据所属的点位。
 - **数据值** (`value`): 数据的文本表示，格式为 `prefix:flat_value`。
 - **发生时间** (`happenedDate`): 数据发生的时间戳。
+- **毫秒内纳秒偏移** (`happenedDateNanoOffset`): 发生时间在当前毫秒内的纳秒偏移，取值范围为 `0 ~ 999999`，默认值为 `0`。
 
 ### 数据值格式
 
@@ -42,8 +43,21 @@ public class FlatData implements Dto {
     private LongIdKey pointKey;     // 点位主键。
     private String value;           // 扁平化的数据值。
     private Date happenedDate;      // 发生时间。
+    private int happenedDateNanoOffset; // 发生时间在毫秒内的纳秒偏移，默认值为 0。
 }
 ```
+
+## 数据排序
+
+`CompareUtil` 为 `FlatData` 提供统一排序语义，推荐优先复用以下比较器：
+
+- `CompareUtil.FLAT_DATA_DEFAULT_COMPARATOR`：默认比较，先按 `pointKey` 升序，
+  再按发生 `Instant` 升序（由 `happenedDate + happenedDateNanoOffset` 组合计算）。
+- `CompareUtil.FLAT_DATA_HAPPENED_INSTANT_ASC_COMPARATOR`：仅按发生 `Instant` 升序，不考虑 `pointKey`。
+- `CompareUtil.FLAT_DATA_HAPPENED_INSTANT_DESC_COMPARATOR`：仅按发生 `Instant` 降序，不考虑 `pointKey`。
+
+说明：本一排序机制仅覆盖 `Data`、`GeneralData`、`FlatData`，不包含 `FastJsonFlatData`,
+因为后者主要用于编解码过程中的 JSON 映射，不建议直接在业务逻辑中使用。
 
 ## 实际应用
 
@@ -109,6 +123,33 @@ public class Example {
 ```
 
 ## 编解码机制
+
+### FastJson 字段映射
+
+默认 `FastJsonFlatDataCodec` 对应的 JSON 字段如下：
+
+- `point_key`: 点位主键。
+- `value`: 扁平值，格式为 `prefix:flat_value`。
+- `happened_date`: 毫秒时间戳。
+- `happened_date_nano_offset`: 发生时间在毫秒内的纳秒偏移。
+
+示例：
+
+```json
+{
+  "point_key": {
+    "long_id": 12450
+  },
+  "value": "integer:42",
+  "happened_date": 724608000000,
+  "happened_date_nano_offset": 123456
+}
+```
+
+兼容性说明：
+
+- 旧 JSON 不包含 `happened_date_nano_offset` 时，解码结果默认按 `0` 处理。
+- 完整发生时间由 `happened_date + happened_date_nano_offset` 共同表达。
 
 ### 配置示例
 

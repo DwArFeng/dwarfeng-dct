@@ -56,6 +56,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Date;
 
+@SuppressWarnings("UnnecessaryModifier")
 public class QuickStartExample {
 
     public static void main(String[] args) throws Exception {
@@ -87,14 +88,18 @@ public class QuickStartExample {
 运行后，您会看到类似如下风格的文本：
 
 ```text
-{"point_key":{"long_id":12450},"value":"integer:42","happened_date":...}
+{"point_key":{"long_id":12450},"value":"integer:42","happened_date":...,"happened_date_nano_offset":0}
 ```
 
 这说明 `dwarfeng-dct` 已经完成了如下工作：
 
 1. 将原始值 `42` 编码为带类型前缀的扁平值 `integer:42`。
-2. 将点位、扁平值、发生时间进一步封装为最终文本。
-3. 在解码时恢复出原始的数据对象及其值类型。
+2. 将点位、扁平值、发生时间与毫秒内纳秒偏移一起封装为最终文本。
+3. 在解码时恢复出原始的数据对象及其值类型，并保留高精度时间语义。
+
+兼容性提示：
+
+- 对于历史报文，若缺少 `happened_date_nano_offset` 字段，解码时会按默认值 `0` 处理。
 
 ## 运行项目示例
 

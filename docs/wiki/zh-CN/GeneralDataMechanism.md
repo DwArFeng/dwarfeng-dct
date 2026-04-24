@@ -6,18 +6,19 @@
 接口的通用实现类，用于表示包含点位主键、数据值和发生时间的完整数据对象。
 它是项目中最基础的数据结构，为数据编码处理提供了标准化的数据模型。
 
-通用数据是 `dwarfeng-dct` 的核心概念，每个数据都包含三个基本要素：点位主键、数据值和发生时间。
+通用数据是 `dwarfeng-dct` 的核心概念，每个数据都包含四个基本要素：点位主键、数据值、发生时间和毫秒内纳秒偏移。
 通过值编解码器机制，支持多种数据类型的编码和解码处理。
 
 ## 核心概念
 
 ### 什么是通用数据
 
-通用数据是 `dwarfeng-dct` 的核心概念，每个数据都包含三个基本要素：
+通用数据是 `dwarfeng-dct` 的核心概念，每个数据都包含四个基本要素：
 
 - **点位主键** (`pointKey`): 用于标识数据所属的点位，不能为 `null`。
 - **数据值** (`value`): 数据的实际值，可以为 `null`，支持任意类型。
 - **发生时间** (`happenedDate`): 数据发生的时间，不能为 `null`。
+- **毫秒内纳秒偏移** (`happenedDateNanoOffset`): 发生时间所在毫秒内的纳秒偏移，取值范围为 `0 ~ 999999`，默认值为 `0`。
 
 ### 数据接口实现
 
@@ -38,6 +39,8 @@ public interface Data {
 
     @Nonnull
     Date getHappenedDate();
+
+    int getHappenedDateNanoOffset();
 }
 ```
 
@@ -52,8 +55,63 @@ public class GeneralData implements Dto, Data {
     private LongIdKey pointKey;    // 点位主键（非空）。
     private Object value;          // 数据值（可空）。
     private Date happenedDate;     // 发生时间（非空）。
+    private int happenedDateNanoOffset; // 发生时间在毫秒内的纳秒偏移，默认值为 0。
 }
 ```
+
+## 时间精度模型
+
+### 字段语义
+
+`GeneralData` 使用以下组合表达高精度发生时间：
+
+- `happenedDate`：毫秒级基准时间。
+- `happenedDateNanoOffset`：该毫秒内的纳秒偏移量，范围为 `0 ~ 999999`。
+
+完整瞬时时间由二者共同决定。推荐通过工具类在 `GeneralData` 与 `Instant` 之间进行转换。
+
+### Instant 转换
+
+推荐使用 `GeneralDataUtil` 的方法统一处理时间字段：
+
+```java
+import com.dwarfeng.dct.bean.dto.GeneralData;
+import com.dwarfeng.dct.util.GeneralDataUtil;
+import com.dwarfeng.subgrade.stack.bean.key.LongIdKey;
+
+import java.time.Instant;
+import java.util.Date;
+
+public class Example {
+
+    public void happenedInstantExample() {
+        GeneralData generalData = new GeneralData(new LongIdKey(12450L), 42, new Date());
+        Instant happenedInstant = Instant.parse("2026-04-17T08:30:12.123456789Z");
+
+        // 写入：同步设置 happenedDate 与 happenedDateNanoOffset。
+        GeneralDataUtil.setHappenedInstant(generalData, happenedInstant);
+
+        // 读取：由 happenedDate + happenedDateNanoOffset 还原 Instant。
+        Instant restoredInstant = GeneralDataUtil.getHappenedInstant(generalData);
+        System.out.println("Restored Instant: " + restoredInstant);
+    }
+}
+```
+
+`GeneralDataUtil` 在转换时会执行参数校验：
+
+- 对对象和时间字段执行 `null` 检查。
+- 对 `happenedDateNanoOffset` 使用 `TimeUtil.checkNanoOffset(...)` 校验范围。
+- 参数不合法时抛出 `NullPointerException` 或 `IllegalArgumentException`。
+
+## 数据排序
+
+`CompareUtil` 为 `GeneralData` 提供统一排序语义，推荐优先复用以下比较器：
+
+- `CompareUtil.GENERAL_DATA_DEFAULT_COMPARATOR`：默认比较，先按 `pointKey` 升序，
+  再按发生 `Instant` 升序（由 `happenedDate + happenedDateNanoOffset` 组合计算）。
+- `CompareUtil.GENERAL_DATA_HAPPENED_INSTANT_ASC_COMPARATOR`：仅按发生 `Instant` 升序，不考虑 `pointKey`。
+- `CompareUtil.GENERAL_DATA_HAPPENED_INSTANT_DESC_COMPARATOR`：仅按发生 `Instant` 降序，不考虑 `pointKey`。
 
 ## 支持的数据类型
 
