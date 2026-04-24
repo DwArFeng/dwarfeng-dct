@@ -4,6 +4,9 @@
 
 ### 功能构建
 
+- 新增工具类。
+  - com.dwarfeng.dct.util.CompareUtil。
+
 - 增强数据时间精度支持。
   - 增加 `com.dwarfeng.dct.bean.dto.FastJsonFlatData.happenedDateNanoOffset` 字段。
   - 增加 `com.dwarfeng.dct.bean.dto.FlatData.happenedDateNanoOffset` 字段。
