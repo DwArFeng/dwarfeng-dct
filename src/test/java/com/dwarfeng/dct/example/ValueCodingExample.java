@@ -70,6 +70,7 @@ public final class ValueCodingExample {
         System.out.println("2. 演示值解码过程...");
         System.out.println("接下来程序将会生成几个文本，并将其解码成对象");
         System.out.println();
+        @SuppressWarnings("GrazieInspectionRunner")
         List<String> strings = Arrays.asList(
                 "integer:12",
                 "long:34",

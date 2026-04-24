@@ -76,6 +76,7 @@ public final class DataCodingExample {
         System.out.println("2. 演示数据解码过程...");
         System.out.println("接下来程序将会生成几个文本，并将其解码成对象");
         System.out.println();
+        @SuppressWarnings("GrazieInspectionRunner")
         List<String> strings = Arrays.asList(
                 "{\"point_key\":{\"long_id\":12450},\"value\":\"integer:12\",\"happened_date\":724608000000}",
                 "{\"point_key\":{\"long_id\":12450},\"value\":\"long:34\",\"happened_date\":724608000000," +
