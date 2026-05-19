@@ -1,0 +1,39 @@
+package com.dwarfeng.dct.stack.handler;
+
+import com.dwarfeng.dct.stack.struct.Data;
+import com.dwarfeng.subgrade.stack.exception.HandlerException;
+import com.dwarfeng.subgrade.stack.handler.Handler;
+
+import javax.annotation.Nonnull;
+
+/**
+ * 数据编码处理器。
+ *
+ * <p>
+ * 数据编码处理器将数据编码为文本，或者将文本解码为数据。
+ *
+ * @author DwArFeng
+ * @since 1.0.0
+ */
+public interface DataCodingHandler extends Handler {
+
+    /**
+     * 将指定的数据编码为文本。
+     *
+     * @param data 指定的数据。
+     * @return 指定的数据编码后的文本。
+     * @throws HandlerException 处理器异常。
+     */
+    @Nonnull
+    String encode(@Nonnull Data data) throws HandlerException;
+
+    /**
+     * 将指定的文本解码为数据。
+     *
+     * @param string 指定的文本。
+     * @return 指定的文本解码后的数据。
+     * @throws HandlerException 处理器异常。
+     */
+    @Nonnull
+    Data decode(@Nonnull String string) throws HandlerException;
+}
