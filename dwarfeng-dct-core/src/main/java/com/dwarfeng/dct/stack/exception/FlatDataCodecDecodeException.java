@@ -9,7 +9,7 @@ package com.dwarfeng.dct.stack.exception;
 public class FlatDataCodecDecodeException extends FlatDataCodecException {
 
     private static final long serialVersionUID = -1760230901457646983L;
-    
+
     protected final String text;
 
     public FlatDataCodecDecodeException(String text) {

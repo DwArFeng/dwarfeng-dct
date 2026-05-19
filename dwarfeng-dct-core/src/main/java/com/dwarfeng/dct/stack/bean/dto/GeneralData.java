@@ -21,7 +21,7 @@ import java.util.Objects;
 public class GeneralData implements Dto, Data {
 
     private static final long serialVersionUID = -8194102788956155530L;
-    
+
     private LongIdKey pointKey;
     private Object value;
     private Date happenedDate;

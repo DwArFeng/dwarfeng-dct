@@ -71,9 +71,11 @@ buildNumber.properties
 #################
 ## Logger Files
 #################
-/logs/
+/dwarfeng-dct-core/logs/
+/dwarfeng-dct-api/logs/
 
 #################
 ## Configuration Files
 #################
-/conf/
+/dwarfeng-dct-core/conf/
+/dwarfeng-dct-api/conf/

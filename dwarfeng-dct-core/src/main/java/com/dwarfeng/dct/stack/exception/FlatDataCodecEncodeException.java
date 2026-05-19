@@ -11,7 +11,7 @@ import com.dwarfeng.dct.stack.bean.dto.FlatData;
 public class FlatDataCodecEncodeException extends FlatDataCodecException {
 
     private static final long serialVersionUID = 3415244234867805014L;
-    
+
     protected final FlatData target;
 
     public FlatDataCodecEncodeException(FlatData target) {
