@@ -1,7 +1,6 @@
 package com.dwarfeng.dct.sdk.handler.fdc;
 
 import com.dwarfeng.dct.stack.bean.dto.FlatData;
-import com.dwarfeng.dct.stack.exception.DctException;
 import com.dwarfeng.dct.stack.exception.FlatDataCodecDecodeException;
 import com.dwarfeng.dct.stack.exception.FlatDataCodecEncodeException;
 import com.dwarfeng.dct.stack.handler.FlatDataCodec;
@@ -19,7 +18,7 @@ public abstract class AbstractFlatDataCodec implements FlatDataCodec {
     public String encode(FlatData target) throws HandlerException {
         try {
             return doEncode(target);
-        } catch (DctException e) {
+        } catch (HandlerException e) {
             throw e;
         } catch (Exception e) {
             throw new FlatDataCodecEncodeException(e, target);
@@ -40,7 +39,7 @@ public abstract class AbstractFlatDataCodec implements FlatDataCodec {
     public FlatData decode(String text) throws HandlerException {
         try {
             return doDecode(text);
-        } catch (DctException e) {
+        } catch (HandlerException e) {
             throw e;
         } catch (Exception e) {
             throw new FlatDataCodecDecodeException(e, text);

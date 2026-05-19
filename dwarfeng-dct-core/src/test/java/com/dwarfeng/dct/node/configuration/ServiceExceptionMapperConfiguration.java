@@ -14,7 +14,7 @@ public class ServiceExceptionMapperConfiguration {
     @Bean
     public MapServiceExceptionMapper mapServiceExceptionMapper() {
         Map<Class<? extends Exception>, ServiceException.Code> destination = ServiceExceptionHelper.putDefaultDestination(null);
-        destination = ServiceExceptionHelper.putDefaultDestination(destination);
+        destination = com.dwarfeng.dct.sdk.util.ServiceExceptionHelper.putDefaultDestination(destination);
         return new MapServiceExceptionMapper(destination, com.dwarfeng.subgrade.sdk.exception.ServiceExceptionCodes.UNDEFINED);
     }
 }

@@ -6,7 +6,7 @@ package com.dwarfeng.dct.stack.exception;
  * @author DwArFeng
  * @since 1.0.0
  */
-public class ValueCodecException extends DctException {
+public class ValueCodecException extends ValueCodingException {
 
     private static final long serialVersionUID = 1448125069073327982L;
 

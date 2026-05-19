@@ -1,6 +1,5 @@
 package com.dwarfeng.dct.sdk.handler.vc;
 
-import com.dwarfeng.dct.stack.exception.DctException;
 import com.dwarfeng.dct.stack.exception.ValueCodecDecodeException;
 import com.dwarfeng.dct.stack.exception.ValueCodecEncodeException;
 import com.dwarfeng.dct.stack.handler.ValueCodec;
@@ -48,7 +47,7 @@ public abstract class AbstractValueCodec implements ValueCodec {
     public String encode(@Nonnull Object target) throws HandlerException {
         try {
             return doEncode(target);
-        } catch (DctException e) {
+        } catch (HandlerException e) {
             throw e;
         } catch (Exception e) {
             throw new ValueCodecEncodeException(e, target);
@@ -71,7 +70,7 @@ public abstract class AbstractValueCodec implements ValueCodec {
     public Object decode(@Nonnull String text) throws HandlerException {
         try {
             return doDecode(text);
-        } catch (DctException e) {
+        } catch (HandlerException e) {
             throw e;
         } catch (Exception e) {
             throw new ValueCodecDecodeException(e, text);

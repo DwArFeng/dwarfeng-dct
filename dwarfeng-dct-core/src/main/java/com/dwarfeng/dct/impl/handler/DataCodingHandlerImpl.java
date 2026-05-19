@@ -1,8 +1,8 @@
 package com.dwarfeng.dct.impl.handler;
 
+import com.dwarfeng.dct.sdk.util.DataCodingExceptionHelper;
 import com.dwarfeng.dct.stack.bean.dto.FlatData;
 import com.dwarfeng.dct.stack.bean.dto.GeneralData;
-import com.dwarfeng.dct.stack.exception.DctException;
 import com.dwarfeng.dct.stack.handler.DataCodingHandler;
 import com.dwarfeng.dct.stack.struct.Data;
 import com.dwarfeng.dct.stack.struct.DataCodingConfig;
@@ -44,10 +44,8 @@ public class DataCodingHandlerImpl implements DataCodingHandler {
             );
             // 使用 FlatData 编解码器进行编码。
             return config.getFlatDataCodec().encode(flatData);
-        } catch (DctException e) {
-            throw e;
         } catch (Exception e) {
-            throw new DctException(e);
+            throw DataCodingExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -67,10 +65,8 @@ public class DataCodingHandlerImpl implements DataCodingHandler {
             return new GeneralData(
                     flatData.getPointKey(), value, flatData.getHappenedDate(), flatData.getHappenedDateNanoOffset()
             );
-        } catch (DctException e) {
-            throw e;
         } catch (Exception e) {
-            throw new DctException(e);
+            throw DataCodingExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }

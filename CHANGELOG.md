@@ -4,6 +4,14 @@
 
 ### 功能构建
 
+- 重构异常机制。
+  - 引入数据编码、值编码分层异常体系，并调整扁平数据/值编解码相关异常的继承关系。
+  - 新增 `DataCodingExceptionHelper`，统一 Handler 与抽象编解码器中的异常解析与抛出逻辑。
+  - 新增 `ValueCodingExceptionHelper`，统一 Handler 与抽象编解码器中的异常解析与抛出逻辑。
+  - 调整 `ServiceExceptionCodes` 的服务异常码。
+  - 调整 `ServiceExceptionHelper` 的服务异常映射。
+  - 补充异常机制相关单元测试。
+
 - 重构项目模块。
   - 新增 `dwarfeng-dct-core` 子模块，并迁移原有代码至该模块。
   - 新增 `dwarfeng-dct-api` 子模块。
@@ -20,7 +28,7 @@
 
 ### 功能移除
 
-- (无)
+- 移除 `DctException` 根异常及 `DCT_FAILED` 服务异常码。
 
 ---
 

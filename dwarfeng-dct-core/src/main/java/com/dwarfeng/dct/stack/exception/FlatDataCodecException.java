@@ -6,7 +6,7 @@ package com.dwarfeng.dct.stack.exception;
  * @author DwArFeng
  * @since 1.0.0
  */
-public class FlatDataCodecException extends DctException {
+public class FlatDataCodecException extends DataCodingException {
 
     private static final long serialVersionUID = -6736829674130458863L;
 

@@ -1,7 +1,7 @@
 package com.dwarfeng.dct.impl.handler;
 
 import com.dwarfeng.dct.sdk.util.Constants;
-import com.dwarfeng.dct.stack.exception.DctException;
+import com.dwarfeng.dct.sdk.util.ValueCodingExceptionHelper;
 import com.dwarfeng.dct.stack.handler.ValueCodec;
 import com.dwarfeng.dct.stack.handler.ValueCodingHandler;
 import com.dwarfeng.dct.stack.struct.ValueCodingConfig;
@@ -117,10 +117,8 @@ public class ValueCodingHandlerImpl implements ValueCodingHandler {
             String valuePrefix = valueCodec.getValuePrefix();
             String encode = valueCodec.encode(target);
             return valuePrefix + Constants.FLAT_DATA_VALUE_PREFIX_DELIMITER + encode;
-        } catch (DctException e) {
-            throw e;
         } catch (Exception e) {
-            throw new DctException(e);
+            throw ValueCodingExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -159,10 +157,8 @@ public class ValueCodingHandlerImpl implements ValueCodingHandler {
             // 去除前缀并解码。
             text = text.substring(textPrefix.length() + Constants.FLAT_DATA_VALUE_PREFIX_DELIMITER.length());
             return valueCodec.decode(text);
-        } catch (DctException e) {
-            throw e;
         } catch (Exception e) {
-            throw new DctException(e);
+            throw ValueCodingExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }

@@ -30,13 +30,14 @@ public final class ServiceExceptionHelper {
             map = new HashMap<>();
         }
 
-        map.put(DctException.class, ServiceExceptionCodes.DCT_FAILED);
-        map.put(ValueCodecException.class, ServiceExceptionCodes.VALUE_CODEC_FAILED);
-        map.put(ValueCodecEncodeException.class, ServiceExceptionCodes.VALUE_CODEC_ENCODE_FAILED);
-        map.put(ValueCodecDecodeException.class, ServiceExceptionCodes.VALUE_CODEC_DECODE_FAILED);
+        map.put(DataCodingException.class, ServiceExceptionCodes.DATA_CODING_FAILED);
         map.put(FlatDataCodecException.class, ServiceExceptionCodes.FLAT_DATA_CODEC_FAILED);
         map.put(FlatDataCodecEncodeException.class, ServiceExceptionCodes.FLAT_DATA_CODEC_ENCODE_FAILED);
         map.put(FlatDataCodecDecodeException.class, ServiceExceptionCodes.FLAT_DATA_CODEC_DECODE_FAILED);
+        map.put(ValueCodingException.class, ServiceExceptionCodes.VALUE_CODING_FAILED);
+        map.put(ValueCodecException.class, ServiceExceptionCodes.VALUE_CODEC_FAILED);
+        map.put(ValueCodecEncodeException.class, ServiceExceptionCodes.VALUE_CODEC_ENCODE_FAILED);
+        map.put(ValueCodecDecodeException.class, ServiceExceptionCodes.VALUE_CODEC_DECODE_FAILED);
 
         return map;
     }
