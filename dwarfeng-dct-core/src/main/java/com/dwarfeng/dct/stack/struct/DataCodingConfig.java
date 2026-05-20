@@ -1,8 +1,8 @@
 package com.dwarfeng.dct.stack.struct;
 
-import com.dwarfeng.dct.sdk.util.FlatDataCodecUtil;
 import com.dwarfeng.dct.stack.handler.FlatDataCodec;
 import com.dwarfeng.dct.stack.handler.ValueCodingHandler;
+import com.dwarfeng.dct.stack.util.DataCodingConfigUtil;
 import com.dwarfeng.dutil.basic.prog.Buildable;
 
 /**
@@ -17,8 +17,18 @@ public final class DataCodingConfig {
     private final ValueCodingHandler valueCodingHandler;
 
     public DataCodingConfig(FlatDataCodec flatDataCodec, ValueCodingHandler valueCodingHandler) {
-        FlatDataCodecUtil.checkCodec(flatDataCodec);
+        this(flatDataCodec, valueCodingHandler, false);
+    }
 
+    private DataCodingConfig(
+            FlatDataCodec flatDataCodec, ValueCodingHandler valueCodingHandler, boolean paramReliable
+    ) {
+        // 如果参数不可靠，则检查参数。
+        if (!paramReliable) {
+            DataCodingConfigUtil.checkFlatDataCodec(flatDataCodec);
+            DataCodingConfigUtil.checkValueCodingHandler(valueCodingHandler);
+        }
+        // 设置值。
         this.flatDataCodec = flatDataCodec;
         this.valueCodingHandler = valueCodingHandler;
     }
@@ -48,20 +58,23 @@ public final class DataCodingConfig {
         }
 
         public Builder setFlatDataCodec(FlatDataCodec flatDataCodec) {
-            FlatDataCodecUtil.checkCodec(flatDataCodec);
             this.flatDataCodec = flatDataCodec;
             return this;
         }
 
         public Builder setValueCodingHandler(ValueCodingHandler valueCodingHandler) {
-            FlatDataCodecUtil.checkValueCodingHandler(valueCodingHandler);
             this.valueCodingHandler = valueCodingHandler;
             return this;
         }
 
         @Override
         public DataCodingConfig build() {
-            return new DataCodingConfig(flatDataCodec, valueCodingHandler);
+            // 检查参数。
+            DataCodingConfigUtil.checkFlatDataCodec(flatDataCodec);
+            DataCodingConfigUtil.checkValueCodingHandler(valueCodingHandler);
+
+            // 构造并返回配置。
+            return new DataCodingConfig(flatDataCodec, valueCodingHandler, true);
         }
 
         @Override

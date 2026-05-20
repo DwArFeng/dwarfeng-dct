@@ -4,6 +4,13 @@
 
 ### 功能构建
 
+- 重构配置机制。
+  - 调整 `com.dwarfeng.dct.stack.struct.DataCodingConfig` 的构建期校验策略。
+  - 调整 `com.dwarfeng.dct.stack.struct.ValueCodingConfig` 的构建期校验策略。
+  - 新增 `com.dwarfeng.dct.stack.util.DataCodingConfigUtil` 校验工具类。
+  - 新增 `com.dwarfeng.dct.stack.util.ValueCodingConfigUtil` 校验工具类。
+  - 补充配置机制相关单元测试。
+
 - 新增 QoS 服务。
   - com.dwarfeng.dct.stack.service.DataCodingQosService。
   - com.dwarfeng.dct.stack.service.ValueCodingQosService。
@@ -31,6 +38,10 @@
 - (无)
 
 ### 功能移除
+
+- 移除部分配置检查工具类。
+  - com.dwarfeng.dct.sdk.util.FlatDataCodecUtil。
+  - com.dwarfeng.dct.sdk.util.ValueCodecUtil。
 
 - 移除 `DctException` 根异常及 `DCT_FAILED` 服务异常码。
 

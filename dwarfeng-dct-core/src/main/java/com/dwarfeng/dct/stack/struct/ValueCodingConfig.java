@@ -1,11 +1,12 @@
 package com.dwarfeng.dct.stack.struct;
 
-import com.dwarfeng.dct.sdk.util.ValueCodecUtil;
 import com.dwarfeng.dct.stack.handler.ValueCodec;
+import com.dwarfeng.dct.stack.util.ValueCodingConfigUtil;
 import com.dwarfeng.dutil.basic.prog.Buildable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,12 +24,23 @@ public final class ValueCodingConfig {
     public ValueCodingConfig(
             List<ValueCodec> codecs, List<Class<?>> preCacheClasses, List<String> preCachePrefixes
     ) {
-        ValueCodecUtil.checkCodecs(codecs);
-        ValueCodecUtil.checkTargetClasses(preCacheClasses);
-        ValueCodecUtil.checkValuePrefixes(preCachePrefixes);
-        this.codecs = codecs;
-        this.preCacheClasses = preCacheClasses;
-        this.preCachePrefixes = preCachePrefixes;
+        this(codecs, preCacheClasses, preCachePrefixes, false);
+    }
+
+    private ValueCodingConfig(
+            List<ValueCodec> codecs, List<Class<?>> preCacheClasses, List<String> preCachePrefixes,
+            boolean paramReliable
+    ) {
+        // 如果参数不可靠，则检查参数。
+        if (!paramReliable) {
+            ValueCodingConfigUtil.checkCodecs(codecs);
+            ValueCodingConfigUtil.checkTargetClasses(preCacheClasses);
+            ValueCodingConfigUtil.checkValuePrefixes(preCachePrefixes);
+        }
+        // 设置值。
+        this.codecs = Collections.unmodifiableList(new ArrayList<>(codecs));
+        this.preCacheClasses = Collections.unmodifiableList(new ArrayList<>(preCacheClasses));
+        this.preCachePrefixes = Collections.unmodifiableList(new ArrayList<>(preCachePrefixes));
     }
 
     public List<ValueCodec> getCodecs() {
@@ -54,54 +66,67 @@ public final class ValueCodingConfig {
 
     public static final class Builder implements Buildable<ValueCodingConfig> {
 
-        private final List<ValueCodec> codecs = new ArrayList<>();
-        private final List<Class<?>> preCacheClasses = new ArrayList<>();
-        private final List<String> preCachePrefixes = new ArrayList<>();
+        private List<ValueCodec> codecs = new ArrayList<>();
+        private List<Class<?>> preCacheClasses = new ArrayList<>();
+        private List<String> preCachePrefixes = new ArrayList<>();
 
         public Builder() {
         }
 
         public Builder addCodec(ValueCodec codec) {
-            ValueCodecUtil.checkCodec(codec);
             codecs.add(codec);
             return this;
         }
 
         public Builder addCodecs(Collection<ValueCodec> codecs) {
-            ValueCodecUtil.checkCodecs(codecs);
             this.codecs.addAll(codecs);
             return this;
         }
 
         public Builder addPreCacheClass(Class<?> preCacheClass) {
-            ValueCodecUtil.checkTargetClass(preCacheClass);
             preCacheClasses.add(preCacheClass);
             return this;
         }
 
         public Builder addPreCacheClasses(Collection<Class<?>> preCacheClasses) {
-            ValueCodecUtil.checkTargetClasses(preCacheClasses);
             this.preCacheClasses.addAll(preCacheClasses);
             return this;
         }
 
         public Builder addPreCachePrefix(String preCachePrefix) {
-            ValueCodecUtil.checkValuePrefix(preCachePrefix);
             preCachePrefixes.add(preCachePrefix);
             return this;
         }
 
         public Builder addPreCachePrefixes(Collection<String> preCachePrefixes) {
-            for (String preCachePrefix : preCachePrefixes) {
-                ValueCodecUtil.checkValuePrefix(preCachePrefix);
-            }
             this.preCachePrefixes.addAll(preCachePrefixes);
+            return this;
+        }
+
+        public Builder setCodecs(List<ValueCodec> codecs) {
+            this.codecs = codecs;
+            return this;
+        }
+
+        public Builder setPreCacheClasses(List<Class<?>> preCacheClasses) {
+            this.preCacheClasses = preCacheClasses;
+            return this;
+        }
+
+        public Builder setPreCachePrefixes(List<String> preCachePrefixes) {
+            this.preCachePrefixes = preCachePrefixes;
             return this;
         }
 
         @Override
         public ValueCodingConfig build() {
-            return new ValueCodingConfig(codecs, preCacheClasses, preCachePrefixes);
+            // 检查参数。
+            ValueCodingConfigUtil.checkCodecs(codecs);
+            ValueCodingConfigUtil.checkTargetClasses(preCacheClasses);
+            ValueCodingConfigUtil.checkValuePrefixes(preCachePrefixes);
+
+            // 构造并返回配置。
+            return new ValueCodingConfig(codecs, preCacheClasses, preCachePrefixes, true);
         }
 
         @Override

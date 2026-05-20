@@ -1,4 +1,4 @@
-package com.dwarfeng.dct.sdk.util;
+package com.dwarfeng.dct.stack.util;
 
 import com.dwarfeng.dct.stack.handler.FlatDataCodec;
 import com.dwarfeng.dct.stack.handler.ValueCodingHandler;
@@ -6,21 +6,21 @@ import com.dwarfeng.dct.stack.handler.ValueCodingHandler;
 import java.util.Objects;
 
 /**
- * 扁平数据编解码器工具类。
+ * 数据编解码配置工具类。
  *
  * @author DwArFeng
- * @since 1.0.0
+ * @since 3.0.0
  */
-public class FlatDataCodecUtil {
+public final class DataCodingConfigUtil {
 
     /**
      * 检查指定的扁平数据编解码器是否合法。
      *
      * @param flatDataCodec 指定的扁平数据编解码器。
      */
-    public static void checkCodec(FlatDataCodec flatDataCodec) {
+    public static void checkFlatDataCodec(FlatDataCodec flatDataCodec) {
         if (Objects.isNull(flatDataCodec)) {
-            throw new IllegalArgumentException("FlatDataCodec 不能为空");
+            throw new NullPointerException("扁平数据编解码器不能为 null");
         }
     }
 
@@ -31,11 +31,11 @@ public class FlatDataCodecUtil {
      */
     public static void checkValueCodingHandler(ValueCodingHandler valueCodingHandler) {
         if (Objects.isNull(valueCodingHandler)) {
-            throw new IllegalArgumentException("ValueCodingHandler 不能为空");
+            throw new NullPointerException("值编码处理器不能为 null");
         }
     }
 
-    private FlatDataCodecUtil() {
+    private DataCodingConfigUtil() {
         throw new IllegalStateException("禁止外部实例化");
     }
 }
