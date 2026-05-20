@@ -27,6 +27,14 @@ public class ServiceExceptionCodesTest {
         Assert.assertEquals(30011, ServiceExceptionCodes.VALUE_CODEC_FAILED.getCode());
         Assert.assertEquals(30012, ServiceExceptionCodes.VALUE_CODEC_ENCODE_FAILED.getCode());
         Assert.assertEquals(30013, ServiceExceptionCodes.VALUE_CODEC_DECODE_FAILED.getCode());
+        Assert.assertEquals(30020, ServiceExceptionCodes.DATA_CODING_QOS_FAILED.getCode());
+        Assert.assertEquals(30021, ServiceExceptionCodes.AMBIGUOUS_DATA_CODING_HANDLER.getCode());
+        Assert.assertEquals(30022, ServiceExceptionCodes.NO_DATA_CODING_HANDLER_PRESENT.getCode());
+        Assert.assertEquals(30023, ServiceExceptionCodes.DATA_CODING_QOS_HANDLER_NOT_FOUND.getCode());
+        Assert.assertEquals(30030, ServiceExceptionCodes.VALUE_CODING_QOS_FAILED.getCode());
+        Assert.assertEquals(30031, ServiceExceptionCodes.AMBIGUOUS_VALUE_CODING_HANDLER.getCode());
+        Assert.assertEquals(30032, ServiceExceptionCodes.NO_VALUE_CODING_HANDLER_PRESENT.getCode());
+        Assert.assertEquals(30033, ServiceExceptionCodes.VALUE_CODING_QOS_HANDLER_NOT_FOUND.getCode());
     }
 
     @Test
@@ -43,6 +51,14 @@ public class ServiceExceptionCodesTest {
             Assert.assertEquals(40011, ServiceExceptionCodes.VALUE_CODEC_FAILED.getCode());
             Assert.assertEquals(40012, ServiceExceptionCodes.VALUE_CODEC_ENCODE_FAILED.getCode());
             Assert.assertEquals(40013, ServiceExceptionCodes.VALUE_CODEC_DECODE_FAILED.getCode());
+            Assert.assertEquals(40020, ServiceExceptionCodes.DATA_CODING_QOS_FAILED.getCode());
+            Assert.assertEquals(40021, ServiceExceptionCodes.AMBIGUOUS_DATA_CODING_HANDLER.getCode());
+            Assert.assertEquals(40022, ServiceExceptionCodes.NO_DATA_CODING_HANDLER_PRESENT.getCode());
+            Assert.assertEquals(40023, ServiceExceptionCodes.DATA_CODING_QOS_HANDLER_NOT_FOUND.getCode());
+            Assert.assertEquals(40030, ServiceExceptionCodes.VALUE_CODING_QOS_FAILED.getCode());
+            Assert.assertEquals(40031, ServiceExceptionCodes.AMBIGUOUS_VALUE_CODING_HANDLER.getCode());
+            Assert.assertEquals(40032, ServiceExceptionCodes.NO_VALUE_CODING_HANDLER_PRESENT.getCode());
+            Assert.assertEquals(40033, ServiceExceptionCodes.VALUE_CODING_QOS_HANDLER_NOT_FOUND.getCode());
         } finally {
             ServiceExceptionCodes.setExceptionCodeOffset(originalOffset);
         }

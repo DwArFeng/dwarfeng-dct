@@ -38,6 +38,14 @@ public final class ServiceExceptionHelper {
         map.put(ValueCodecException.class, ServiceExceptionCodes.VALUE_CODEC_FAILED);
         map.put(ValueCodecEncodeException.class, ServiceExceptionCodes.VALUE_CODEC_ENCODE_FAILED);
         map.put(ValueCodecDecodeException.class, ServiceExceptionCodes.VALUE_CODEC_DECODE_FAILED);
+        map.put(DataCodingQosException.class, ServiceExceptionCodes.DATA_CODING_QOS_FAILED);
+        map.put(AmbiguousDataCodingHandlerException.class, ServiceExceptionCodes.AMBIGUOUS_DATA_CODING_HANDLER);
+        map.put(NoDataCodingHandlerPresentException.class, ServiceExceptionCodes.NO_DATA_CODING_HANDLER_PRESENT);
+        map.put(DataCodingHandlerNotFoundException.class, ServiceExceptionCodes.DATA_CODING_QOS_HANDLER_NOT_FOUND);
+        map.put(ValueCodingQosException.class, ServiceExceptionCodes.VALUE_CODING_QOS_FAILED);
+        map.put(AmbiguousValueCodingHandlerException.class, ServiceExceptionCodes.AMBIGUOUS_VALUE_CODING_HANDLER);
+        map.put(NoValueCodingHandlerPresentException.class, ServiceExceptionCodes.NO_VALUE_CODING_HANDLER_PRESENT);
+        map.put(ValueCodingHandlerNotFoundException.class, ServiceExceptionCodes.VALUE_CODING_QOS_HANDLER_NOT_FOUND);
 
         return map;
     }

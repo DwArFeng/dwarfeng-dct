@@ -34,6 +34,14 @@ public class ServiceExceptionHelperTest {
         Assert.assertEquals(ServiceExceptionCodes.VALUE_CODEC_FAILED, map.get(ValueCodecException.class));
         Assert.assertEquals(ServiceExceptionCodes.VALUE_CODEC_ENCODE_FAILED, map.get(ValueCodecEncodeException.class));
         Assert.assertEquals(ServiceExceptionCodes.VALUE_CODEC_DECODE_FAILED, map.get(ValueCodecDecodeException.class));
+        Assert.assertEquals(ServiceExceptionCodes.DATA_CODING_QOS_FAILED, map.get(DataCodingQosException.class));
+        Assert.assertEquals(ServiceExceptionCodes.AMBIGUOUS_DATA_CODING_HANDLER, map.get(AmbiguousDataCodingHandlerException.class));
+        Assert.assertEquals(ServiceExceptionCodes.NO_DATA_CODING_HANDLER_PRESENT, map.get(NoDataCodingHandlerPresentException.class));
+        Assert.assertEquals(ServiceExceptionCodes.DATA_CODING_QOS_HANDLER_NOT_FOUND, map.get(DataCodingHandlerNotFoundException.class));
+        Assert.assertEquals(ServiceExceptionCodes.VALUE_CODING_QOS_FAILED, map.get(ValueCodingQosException.class));
+        Assert.assertEquals(ServiceExceptionCodes.AMBIGUOUS_VALUE_CODING_HANDLER, map.get(AmbiguousValueCodingHandlerException.class));
+        Assert.assertEquals(ServiceExceptionCodes.NO_VALUE_CODING_HANDLER_PRESENT, map.get(NoValueCodingHandlerPresentException.class));
+        Assert.assertEquals(ServiceExceptionCodes.VALUE_CODING_QOS_HANDLER_NOT_FOUND, map.get(ValueCodingHandlerNotFoundException.class));
     }
 
     @Test
@@ -41,6 +49,6 @@ public class ServiceExceptionHelperTest {
         Map<Class<? extends Exception>, ServiceException.Code> map =
                 ServiceExceptionHelper.putDefaultDestination(null);
         Assert.assertNotNull(map);
-        Assert.assertEquals(8, map.size());
+        Assert.assertEquals(16, map.size());
     }
 }

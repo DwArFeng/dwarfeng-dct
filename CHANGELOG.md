@@ -4,6 +4,10 @@
 
 ### 功能构建
 
+- 新增 QoS 服务。
+  - com.dwarfeng.dct.stack.service.DataCodingQosService。
+  - com.dwarfeng.dct.stack.service.ValueCodingQosService。
+
 - 重构异常机制。
   - 引入数据编码、值编码分层异常体系，并调整扁平数据/值编解码相关异常的继承关系。
   - 新增 `DataCodingExceptionHelper`，统一 Handler 与抽象编解码器中的异常解析与抛出逻辑。
