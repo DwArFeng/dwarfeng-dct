@@ -4,6 +4,11 @@
 
 ### 功能构建
 
+- 为项目增加 xsd 配置机制。
+  - 增加 `META-INF/dwarfeng-dct.xsd` 文件。
+  - 增加 `com.dwarfeng.dct.node.configuration.DctNamespaceHandler` 及对应的定义解析器。
+  - 调整测试目录的相关配置文件，以使用新的 xsd 配置机制。
+
 - 重构配置机制。
   - 调整 `com.dwarfeng.dct.stack.struct.DataCodingConfig` 的构建期校验策略。
   - 调整 `com.dwarfeng.dct.stack.struct.ValueCodingConfig` 的构建期校验策略。

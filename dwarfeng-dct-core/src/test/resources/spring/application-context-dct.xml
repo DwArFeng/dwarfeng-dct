@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dct="http://dwarfeng.com/schema/dwarfeng-dct"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://dwarfeng.com/schema/dwarfeng-dct
+        http://dwarfeng.com/schema/dwarfeng-dct/dwarfeng-dct.xsd"
+>
+
+    <bean id="fastJsonFlatDataCodec" class="com.dwarfeng.dct.impl.handler.fdc.FastJsonFlatDataCodec"/>
+
+    <dct:value-coding-config>
+        <dct:value-codec>
+            <dct:value-codec-impl package-scan="com.dwarfeng.dct.impl.handler.vc"/>
+        </dct:value-codec>
+    </dct:value-coding-config>
+    <dct:value-coding-handler/>
+    <dct:value-coding-qos/>
+    <dct:data-coding-config flat-data-codec-ref="fastJsonFlatDataCodec"/>
+    <dct:data-coding-handler/>
+    <dct:data-coding-qos/>
+</beans>

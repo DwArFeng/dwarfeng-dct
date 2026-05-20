@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<xsd:schema
+        xmlns="http://dwarfeng.com/schema/dwarfeng-dct"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:tool="http://www.springframework.org/schema/tool"
+        targetNamespace="http://dwarfeng.com/schema/dwarfeng-dct"
+        elementFormDefault="qualified"
+>
+
+    <xsd:import
+            namespace="http://www.springframework.org/schema/tool"
+            schemaLocation="https://www.springframework.org/schema/tool/spring-tool.xsd"
+    />
+
+    <xsd:annotation>
+        <xsd:documentation>
+            <![CDATA[DwArFeng dwarfeng-dct 项目的命名空间支持。]]></xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="value-coding-config">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[通过该元素配置值编解码器相关属性。]]>
+            </xsd:documentation>
+            <xsd:appinfo>
+                <tool:annotation>
+                    <tool:exports type="com.dwarfeng.dct.stack.struct.ValueCodingConfig"/>
+                </tool:annotation>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="value-codec" minOccurs="0">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            <![CDATA[值编解码器配置。]]>
+                        </xsd:documentation>
+                    </xsd:annotation>
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="value-codec-impl" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:annotation>
+                                    <xsd:documentation>
+                                        <![CDATA[ValueCodec 的实现类。]]>
+                                    </xsd:documentation>
+                                    <xsd:appinfo>
+                                        <tool:exports type="com.dwarfeng.dct.stack.handler.ValueCodec"/>
+                                    </xsd:appinfo>
+                                </xsd:annotation>
+                                <xsd:complexType>
+                                    <xsd:attribute name="codec-name" type="xsd:token">
+                                        <xsd:annotation>
+                                            <xsd:documentation>
+                                                <![CDATA[ValueCodec 的 bean id。]]>
+                                            </xsd:documentation>
+                                            <xsd:appinfo>
+                                                <tool:annotation>
+                                                    <tool:expected-type type="java.lang.String"/>
+                                                </tool:annotation>
+                                            </xsd:appinfo>
+                                        </xsd:annotation>
+                                    </xsd:attribute>
+                                    <xsd:attribute name="class" type="xsd:string">
+                                        <xsd:annotation>
+                                            <xsd:documentation>
+                                                <![CDATA[ValueCodec 的 class 名称，使用该类的无参数构造方法构造对象。]]>
+                                            </xsd:documentation>
+                                            <xsd:appinfo>
+                                                <tool:annotation>
+                                                    <tool:expected-type type="java.lang.String"/>
+                                                </tool:annotation>
+                                            </xsd:appinfo>
+                                        </xsd:annotation>
+                                    </xsd:attribute>
+                                    <xsd:attribute name="codec-ref" type="xsd:string">
+                                        <xsd:annotation>
+                                            <xsd:documentation>
+                                                <![CDATA[ValueCodec 的 bean 引用名称。]]>
+                                            </xsd:documentation>
+                                            <xsd:appinfo>
+                                                <tool:annotation kind="ref">
+                                                    <tool:expected-type
+                                                            type="com.dwarfeng.dct.stack.handler.ValueCodec"
+                                                    />
+                                                </tool:annotation>
+                                            </xsd:appinfo>
+                                        </xsd:annotation>
+                                    </xsd:attribute>
+                                    <xsd:attribute name="package-scan" type="xsd:string">
+                                        <xsd:annotation>
+                                            <xsd:documentation>
+                                                <![CDATA[ValueCodec 所包的名称。]]>
+                                            </xsd:documentation>
+                                            <xsd:appinfo>
+                                                <tool:annotation>
+                                                    <tool:expected-type type="java.lang.String"/>
+                                                </tool:annotation>
+                                            </xsd:appinfo>
+                                        </xsd:annotation>
+                                    </xsd:attribute>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:all>
+            <xsd:attribute
+                    name="config-name"
+                    type="xsd:token"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_VALUE_CODING_CONFIG_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[配置的 bean 名称，默认为 valueCodingConfig。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="data-coding-config">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[通过该元素配置数据编解码器相关属性。]]>
+            </xsd:documentation>
+            <xsd:appinfo>
+                <tool:annotation>
+                    <tool:exports type="com.dwarfeng.dct.stack.struct.DataCodingConfig"/>
+                </tool:annotation>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute
+                    name="config-name"
+                    type="xsd:token"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_DATA_CODING_CONFIG_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[配置的 bean 名称，默认为 dataCodingConfig。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="flat-data-codec-ref" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[FlatDataCodec bean 引用。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation kind="ref">
+                            <tool:expected-type type="com.dwarfeng.dct.stack.handler.FlatDataCodec"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="value-coding-handler-ref"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_VALUE_CODING_HANDLER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[ValueCodingHandler bean 引用，默认为 valueCodingHandler。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation kind="ref">
+                            <tool:expected-type type="com.dwarfeng.dct.stack.handler.ValueCodingHandler"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="value-coding-handler">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[通过该元素配置 ValueCodingHandler。]]>
+            </xsd:documentation>
+            <xsd:appinfo>
+                <tool:annotation>
+                    <tool:exports type="com.dwarfeng.dct.stack.handler.ValueCodingHandler"/>
+                </tool:annotation>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute
+                    name="handler-name"
+                    type="xsd:token"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_VALUE_CODING_HANDLER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Handler 的 bean 名称，默认为 valueCodingHandler。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="config-ref"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_VALUE_CODING_CONFIG_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[ValueCodingConfig bean 引用，默认为 valueCodingConfig。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation kind="ref">
+                            <tool:expected-type type="com.dwarfeng.dct.stack.struct.ValueCodingConfig"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="data-coding-handler">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[通过该元素配置 DataCodingHandler。]]>
+            </xsd:documentation>
+            <xsd:appinfo>
+                <tool:annotation>
+                    <tool:exports type="com.dwarfeng.dct.stack.handler.DataCodingHandler"/>
+                </tool:annotation>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute
+                    name="handler-name"
+                    type="xsd:token"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_DATA_CODING_HANDLER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Handler 的 bean 名称，默认为 dataCodingHandler。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="config-ref"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_DATA_CODING_CONFIG_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[DataCodingConfig bean 引用，默认为 dataCodingConfig。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation kind="ref">
+                            <tool:expected-type type="com.dwarfeng.dct.stack.struct.DataCodingConfig"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="value-coding-qos">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[通过该元素配置 ValueCodingQosHandler 与 ValueCodingQosService。]]>
+            </xsd:documentation>
+            <xsd:appinfo>
+                <tool:annotation>
+                    <tool:exports type="com.dwarfeng.dct.stack.service.ValueCodingQosService"/>
+                </tool:annotation>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute
+                    name="service-name"
+                    type="xsd:token"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_VALUE_CODING_QOS_SERVICE_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[ValueCodingQos 服务的 bean 名称，默认为 valueCodingQosService。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="qos-handler-name"
+                    type="xsd:token"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_VALUE_CODING_QOS_HANDLER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[ValueCodingQosHandler 的 bean 名称，默认为 valueCodingQosHandler。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="handler-ref"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_VALUE_CODING_HANDLER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[ValueCodingHandler 的 bean 引用，默认为 valueCodingHandler。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation kind="ref">
+                            <tool:expected-type type="com.dwarfeng.dct.stack.handler.ValueCodingHandler"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="sem-ref"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_SERVICE_EXCEPTION_MAPPER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[ServiceExceptionMapper bean 引用，默认为 mapServiceExceptionMapper。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation kind="ref">
+                            <tool:expected-type type="com.dwarfeng.subgrade.stack.exception.ServiceExceptionMapper"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="data-coding-qos">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[通过该元素配置 DataCodingQosHandler 与 DataCodingQosService。]]>
+            </xsd:documentation>
+            <xsd:appinfo>
+                <tool:annotation>
+                    <tool:exports type="com.dwarfeng.dct.stack.service.DataCodingQosService"/>
+                </tool:annotation>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute
+                    name="service-name"
+                    type="xsd:token"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_DATA_CODING_QOS_SERVICE_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[DataCodingQos 服务的 bean 名称，默认为 dataCodingQosService。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="qos-handler-name"
+                    type="xsd:token"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_DATA_CODING_QOS_HANDLER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[DataCodingQosHandler 的 bean 名称，默认为 dataCodingQosHandler。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="handler-ref"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_DATA_CODING_HANDLER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[DataCodingHandler 的 bean 引用，默认为 dataCodingHandler。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation kind="ref">
+                            <tool:expected-type type="com.dwarfeng.dct.stack.handler.DataCodingHandler"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="sem-ref"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_SERVICE_EXCEPTION_MAPPER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[ServiceExceptionMapper bean 引用，默认为 mapServiceExceptionMapper。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation kind="ref">
+                            <tool:expected-type type="com.dwarfeng.subgrade.stack.exception.ServiceExceptionMapper"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

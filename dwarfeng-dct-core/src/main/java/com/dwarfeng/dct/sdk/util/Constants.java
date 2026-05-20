@@ -70,6 +70,76 @@ public final class Constants {
      */
     public static final int VALUE_CODEC_PRIORITY_MIN = Integer.MAX_VALUE;
 
+    /**
+     * XSD 默认的值编码配置 Bean 名称。
+     *
+     * @since 3.0.0
+     */
+    public static final String XSD_DEFAULT_VALUE_CODING_CONFIG_NAME = "valueCodingConfig";
+
+    /**
+     * XSD 默认的数据编码配置 Bean 名称。
+     *
+     * @since 3.0.0
+     */
+    public static final String XSD_DEFAULT_DATA_CODING_CONFIG_NAME = "dataCodingConfig";
+
+    /**
+     * XSD 默认的值编码处理器 Bean 名称。
+     *
+     * @since 3.0.0
+     */
+    public static final String XSD_DEFAULT_VALUE_CODING_HANDLER_NAME = "valueCodingHandler";
+
+    /**
+     * XSD 默认的数据编码处理器 Bean 名称。
+     *
+     * @since 3.0.0
+     */
+    public static final String XSD_DEFAULT_DATA_CODING_HANDLER_NAME = "dataCodingHandler";
+
+    /**
+     * XSD 默认的值编码 QoS 处理器 Bean 名称。
+     *
+     * @since 3.0.0
+     */
+    public static final String XSD_DEFAULT_VALUE_CODING_QOS_HANDLER_NAME = "valueCodingQosHandler";
+
+    /**
+     * XSD 默认的数据编码 QoS 处理器 Bean 名称。
+     *
+     * @since 3.0.0
+     */
+    public static final String XSD_DEFAULT_DATA_CODING_QOS_HANDLER_NAME = "dataCodingQosHandler";
+
+    /**
+     * XSD 默认的值编码 QoS 服务 Bean 名称。
+     *
+     * @since 3.0.0
+     */
+    public static final String XSD_DEFAULT_VALUE_CODING_QOS_SERVICE_NAME = "valueCodingQosService";
+
+    /**
+     * XSD 默认的数据编码 QoS 服务 Bean 名称。
+     *
+     * @since 3.0.0
+     */
+    public static final String XSD_DEFAULT_DATA_CODING_QOS_SERVICE_NAME = "dataCodingQosService";
+
+    /**
+     * XSD 默认的服务异常映射器 Bean 名称。
+     *
+     * @since 3.0.0
+     */
+    public static final String XSD_DEFAULT_SERVICE_EXCEPTION_MAPPER_NAME = "mapServiceExceptionMapper";
+
+    /**
+     * XSD 默认的值编解码器包扫描路径。
+     *
+     * @since 3.0.0
+     */
+    public static final String XSD_DEFAULT_VALUE_CODEC_PACKAGE_SCAN = "com.dwarfeng.dct.impl.handler.vc";
+
     private Constants() {
         throw new IllegalStateException("禁止外部实例化");
     }
