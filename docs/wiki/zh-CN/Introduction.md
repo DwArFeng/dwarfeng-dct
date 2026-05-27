@@ -1,19 +1,31 @@
 # dwarfeng-dct
 
-Dwarfeng（赵扶风）的 DCT 服务，基于 `subgrade` 项目，提供了数据编码与传输的功能。
+数据编码与传输服务。
+
+Data Coding and Transmission for DwArFeng
+
+该项目提供通用的数据编码与传输能力，将带点位、时间和值的数据编码为文本，并支持从文本还原数据，项目基于 `subgrade` 构建。
 
 ---
 
-## DCT 能够做什么？
+## 特性
 
-DCT 是数据编码与传输（Data Coding and Transmission）的缩写。总体来说，DCT 服务提供了一种风格统一，易于阅读，
-适用于多种数据类型的数据编码与传输的数据处理方式。这种数据处理方式通过 `subgrade` 项目的处理器对外提供。
+1. 标准数据结构：`Data`、`GeneralData`、`FlatData`（毫秒时间基线 + 毫秒内纳秒偏移）。
+2. 基于 FastJson 的默认 JSON 数据格式（`point_key`、`value`、`happened_date`、`happened_date_nano_offset`）。
+3. 值编解码器体系：`ValueCodingHandler`、`ValueCodec`，支持常见基础类型与可序列化对象。
+4. 数据编解码器体系：`DataCodingHandler`、`FlatDataCodec`，支持数据对象与文本的互相转换。
+5. Subgrade 架构支持：`DataCodingQosService`、`ValueCodingQosService` 及对应实现。
+6. Spring 简单配置：`com.dwarfeng.dct.node.configuration.SimpleConfiguration`。
+7. XSD 命名空间装配（`3.0.0.a` 起）。
+8. `dwarfeng-dct-api` 模块提供 spring-telqos 集成（`DataCodingCommand`、`ValueCodingCommand`）。
 
-您可以在以下场景中使用 `dwarfeng-dct` 项目：
+运行下列示例以观察主要特性：
 
-1. 在设备侧采集多种类型的数据，将数据编码后发送到消息队列，使用时从消息队列中获取数据，解码后进行处理，且不丢失数据类型信息。
-2. 采集的数据类型不固定，使用数据库存储数据，且不丢失数据类型信息。
-3. 编码后的数据相对可读，不像 Base64 编码那样难以阅读，且数据编码后长度相对较短。
+| 所在模块              | 示例类名                                                     | 说明          |
+|-------------------|----------------------------------------------------------|-------------|
+| dwarfeng-dct-api  | `com.dwarfeng.dct.api.integration.example.TelqosExample` | Telqos 集成示例 |
+| dwarfeng-dct-core | `com.dwarfeng.dct.node.example.DataCodingExample`        | 数据编码示例      |
+| dwarfeng-dct-core | `com.dwarfeng.dct.node.example.ValueCodingExample`       | 值编码示例       |
 
 ## 文档
 
@@ -102,51 +114,67 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 
 1. 下载源码。
 
-   - 使用 git 进行源码下载。
-      ```
-      git clone git@github.com:DwArFeng/dwarfeng-ftp.git
-      ```
+   使用 git 进行源码下载。
 
-   - 对于中国用户，可以使用 gitee 进行高速下载。
-      ```
-      git clone git@gitee.com:dwarfeng/dwarfeng-ftp.git
-      ```
+   ```shell
+   git clone git@github.com:DwArFeng/dwarfeng-dct.git
+   ```
+
+   对于中国用户，可以使用 gitee 进行高速下载。
+
+   ```shell
+   git clone git@gitee.com:dwarfeng/dwarfeng-dct.git
+   ```
 
 2. 项目安装。
 
-   进入项目根目录，执行 maven 命令
-   ```
+   进入项目根目录，执行 maven 命令：
+
+   ```shell
    mvn clean source:jar install
    ```
 
 3. 项目引入。
 
-   在项目的 pom.xml 中添加如下依赖：
+   在项目的 `pom.xml` 中添加如下依赖：
+
+   `dwarfeng-dct-core` 提供核心 DTO、工具类与 Handler 实现，为大多数场景的必选依赖：
+
    ```xml
    <dependency>
        <groupId>com.dwarfeng</groupId>
-       <artifactId>dwarfeng-dct</artifactId>
+       <artifactId>dwarfeng-dct-core</artifactId>
+       <version>${dwarfeng-dct.version}</version>
+   </dependency>
+   ```
+
+   如需使用 spring-telqos 命令行集成，可额外引入 `dwarfeng-dct-api`：
+
+   ```xml
+   <dependency>
+       <groupId>com.dwarfeng</groupId>
+       <artifactId>dwarfeng-dct-api</artifactId>
        <version>${dwarfeng-dct.version}</version>
    </dependency>
    ```
 
 4. enjoy it.
 
----
-
 ## 如何使用
 
-1. 运行 `src/test` 下的 `Example` 以观察全部特性。
+1. 运行 `dwarfeng-dct-api/src/test` 或 `dwarfeng-dct-core/src/test` 下的示例与测试以观察主要特性。
 2. 观察项目结构，将其中的配置运用到其它的 subgrade 项目中。
 
-### 简单配置
+### 单例模式
 
-加载 `com.dwarfeng.dct.config.SimpleDctConfig` 类，即可简单地获得单例模式的 `DataCodingHandler` 和 `ValueCodingHandler`。
-在项目的 `application-context-scan.xml` 中追加 `com.dwarfeng.dct.configuration` 包中全部 bean 的扫描，示例如下:
+加载 `com.dwarfeng.dct.node.configuration.SimpleConfiguration`，即可获得单例模式的 `DataCodingHandler`、
+`ValueCodingHandler`、`DataCodingQosHandler`、`ValueCodingQosHandler`、`DataCodingQosService` 与 `ValueCodingQosService`。
+在项目的 `application-context-scan.xml` 中追加 `com.dwarfeng.dct.node.configuration` 包中全部 bean 的扫描，示例如下:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<!--suppress SpringFacetInspection -->
+<!-- 以下注释用于抑制 idea 中 .md 的警告，实际并无错误，在使用时可以连同本注释一起删除。 -->
+<!--suppress SpringXmlModelInspection -->
 <beans
         xmlns:context="http://www.springframework.org/schema/context"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -158,15 +186,16 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 >
 
     <!-- 扫描 configuration 包中的全部 bean。 -->
-    <context:component-scan base-package="com.dwarfeng.dct.configuration"/>
+    <context:component-scan base-package="com.dwarfeng.dct.node.configuration"/>
 </beans>
 ```
 
-或者只扫描 `com.dwarfeng.dct.configuration` 包中的 `SimpleConfiguration`，示例如下:
+或者只扫描 `com.dwarfeng.dct.node.configuration` 包中的 `SimpleConfiguration`，示例如下:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<!--suppress SpringFacetInspection -->
+<!-- 以下注释用于抑制 idea 中 .md 的警告，实际并无错误，在使用时可以连同本注释一起删除。 -->
+<!--suppress SpringXmlModelInspection -->
 <beans
         xmlns:context="http://www.springframework.org/schema/context"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -178,159 +207,125 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 >
 
     <!-- 扫描 configuration 包中的 SimpleConfiguration -->
-    <context:component-scan base-package="com.dwarfeng.dct.configuration" use-default-filters="false">
+    <context:component-scan base-package="com.dwarfeng.dct.node.configuration" use-default-filters="false">
         <context:include-filter
                 type="assignable"
-                expression="com.dwarfeng.dct.configuration.SimpleConfiguration"
+                expression="com.dwarfeng.dct.node.configuration.SimpleConfiguration"
         />
     </context:component-scan>
 </beans>
 ```
 
-### 自定义配置
+### 多实例模式
 
-自定义配置较为灵活，可以在项目中的 `bean-definition.xml` 中追加配置，也可以自定义配置类。
-自定义配置适用于以下场景：
+不使用简单配置，使用 xml 或者配置类生成多个 `DataCodingHandlerImpl` 与 `ValueCodingHandlerImpl` 实例。  
+在项目的 `bean-definition.xml` 中追加配置，示例如下:
 
-1. 非单例模式的 `DataCodingHandler` 和 `ValueCodingHandler`。
-2. 需要自定义 `FlatDataCodec` 和 `ValueCodec` 的实现。
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 以下注释用于抑制 idea 中 .md 的警告，实际并无错误，在使用时可以连同本注释一起删除。 -->
+<!--suppress SpringBeanConstructorArgInspection, SpringXmlModelInspection -->
+<beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dct="http://dwarfeng.com/schema/dwarfeng-dct"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://dwarfeng.com/schema/dwarfeng-dct
+        http://dwarfeng.com/schema/dwarfeng-dct/dwarfeng-dct.xsd"
+>
 
-由于自定义配置较为灵活，因此在此不做过多介绍，请开发者自行编写配置。
+    <!-- 扁平数据编解码器。 -->
+    <bean name="fastJsonFlatDataCodec" class="com.dwarfeng.dct.impl.handler.fdc.FastJsonFlatDataCodec"/>
 
-需要注意的是：`DataCodingHandler` 和 `ValueCodingHandler` 在使用之前需要调用 `init()` 方法进行初始化。
+    <!-- 值编解码配置与值编码处理器。 -->
+    <dct:value-coding-config config-name="valueCodingConfig">
+        <dct:value-codec>
+            <dct:value-codec-impl package-scan="com.dwarfeng.dct.impl.handler.vc"/>
+        </dct:value-codec>
+    </dct:value-coding-config>
+    <dct:value-coding-handler handler-name="valueCodingHandler1" config-ref="valueCodingConfig"/>
+    <dct:value-coding-handler handler-name="valueCodingHandler2" config-ref="valueCodingConfig"/>
 
----
+    <!-- 数据编解码配置与数据编码处理器。 -->
+    <dct:data-coding-config
+            config-name="dataCodingConfig1"
+            flat-data-codec-ref="fastJsonFlatDataCodec"
+            value-coding-handler-ref="valueCodingHandler1"
+    />
+    <dct:data-coding-config
+            config-name="dataCodingConfig2"
+            flat-data-codec-ref="fastJsonFlatDataCodec"
+            value-coding-handler-ref="valueCodingHandler2"
+    />
+    <dct:data-coding-handler handler-name="dataCodingHandler1" config-ref="dataCodingConfig1"/>
+    <dct:data-coding-handler handler-name="dataCodingHandler2" config-ref="dataCodingConfig2"/>
 
-## 集成/二次开发
+    <!-- QoS 处理器：通过构造器注入多个 Handler Bean 组成的 Map。 -->
+    <bean name="valueCodingQosHandler" class="com.dwarfeng.dct.impl.handler.ValueCodingQosHandlerImpl">
+        <constructor-arg>
+            <map>
+                <entry key="valueCodingHandler1" value-ref="valueCodingHandler1"/>
+                <entry key="valueCodingHandler2" value-ref="valueCodingHandler2"/>
+            </map>
+        </constructor-arg>
+    </bean>
+    <bean name="dataCodingQosHandler" class="com.dwarfeng.dct.impl.handler.DataCodingQosHandlerImpl">
+        <constructor-arg>
+            <map>
+                <entry key="dataCodingHandler1" value-ref="dataCodingHandler1"/>
+                <entry key="dataCodingHandler2" value-ref="dataCodingHandler2"/>
+            </map>
+        </constructor-arg>
+    </bean>
 
-### 说明
-
-`dwarfeng-dct` 项目支持通过集成/二次开发的方式扩展其功能，包括：
-
-1. 自定义扁平数据编解码器，将 `Data` 序列化为 `JSON` 以外的其它格式。
-2. 自定义值编解码器，扩展 `Data` 的值的支持类型。
-
-开发人员只需要在项目中引用 `dwarfeng-dct` 的依赖，即可进行集成/二次开发，无需额外的配置。
-
-### 自定义扁平数据编解码器
-
-#### 开发
-
-`dwarfeng-dct` 项目中的 `FlatDataCodec` 接口定义了扁平数据编解码器的基本功能，开发人员可以通过实现该接口，
-自定义扁平数据编解码器。扩展的编解码器可以将 `Data` 序列化为 `JSON` 以外的其它格式。
-
-建议在实现 `FlatDataCodec` 接口的同时，继承 `AbstractFlatDataCodec` 类，该类对通用的业务逻辑进行了封装，如异常处理等。
-继承 `AbstractFlatDataCodec` 类可以使开发人员更加专注于编解码业务的实现。
-
-```java
-import com.dwarfeng.dct.handler.fdc.AbstractFlatDataCodec;
-
-@SuppressWarnings("RedundantThrows")
-public class CustomFlatDataCodec extends AbstractFlatDataCodec {
-
-    @Override
-    protected String doEncode(FlatData target) throws Exception {
-        // 实现编码逻辑，而不需要关注异常处理。
-        return xxx;
-    }
-
-    @Override
-    protected FlatData doDecode(String text) throws Exception {
-        // 实现解码逻辑，而不需要关注异常处理。
-        return xxx;
-    }
-}
+    <!-- QoS 服务。 -->
+    <bean name="valueCodingQosService" class="com.dwarfeng.dct.impl.service.ValueCodingQosServiceImpl">
+        <constructor-arg ref="valueCodingQosHandler"/>
+        <constructor-arg ref="mapServiceExceptionMapper"/>
+    </bean>
+    <bean name="dataCodingQosService" class="com.dwarfeng.dct.impl.service.DataCodingQosServiceImpl">
+        <constructor-arg ref="dataCodingQosHandler"/>
+        <constructor-arg ref="mapServiceExceptionMapper"/>
+    </bean>
+</beans>
 ```
 
-#### 使用
+### XSD 配置
 
-在构造 `DataCodingHandlerImpl` 时，将自定义的 `FlatDataCodec` 作为 `DataCodingConfig` 中的配置项传入即可，使用
-`DataCodingConfig.Builder` 可以使这一过程更加简单。
+从 `3.0.0.a` 版本开始，可以使用 `dct` 命名空间装配 `DataCodingHandler`、`ValueCodingHandler` 与对应 QoS 服务。  
+在项目的 `application-context-dct.xml` 中追加配置，示例如下:
 
-```java
-import com.dwarfeng.dct.handler.DataCodingHandler;
-import com.dwarfeng.dct.handler.DataCodingHandlerImpl;
-import com.dwarfeng.dct.handler.ValueCodingHandler;
-import com.dwarfeng.dct.struct.DataCodingConfig;
-import org.springframework.context.annotation.Configuration;
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 以下注释用于抑制 idea 中 .md 的警告，实际并无错误，在使用时可以连同本注释一起删除。, SpringXmlModelInspection -->
+<!--suppress SpringPlaceholdersInspection, SpringXmlModelInspection -->
+<beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dct="http://dwarfeng.com/schema/dwarfeng-dct"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://dwarfeng.com/schema/dwarfeng-dct
+        http://dwarfeng.com/schema/dwarfeng-dct/dwarfeng-dct.xsd"
+>
 
-@SuppressWarnings({"SpringFacetCodeInspection", "RedundantSuppression"})
-@Configuration
-public class CustomConfiguration {
+    <bean id="fastJsonFlatDataCodec" class="com.dwarfeng.dct.impl.handler.fdc.FastJsonFlatDataCodec"/>
 
-    @Bean
-    public DataCodingHandler dataCodingHandler(ValueCodingHandler valueCodingHandler) {
-        // 开发人员自己实现的 FlatDataCodec。
-        CustomFlatDataCodec customFlatDataCodec = new CustomFlatDataCodec();
-        DataCodingConfig config = new DataCodingConfig.Builder()
-                .setFlatDataCodec(customFlatDataCodec)
-                .setValueCodingHandler(valueCodingHandler)
-                .build();
-        return new DataCodingHandlerImpl(config);
-    }
-}
+    <dct:value-coding-config>
+        <dct:value-codec>
+            <dct:value-codec-impl package-scan="com.dwarfeng.dct.impl.handler.vc"/>
+        </dct:value-codec>
+    </dct:value-coding-config>
+    <dct:value-coding-handler/>
+    <dct:value-coding-qos/>
+    <dct:data-coding-config flat-data-codec-ref="fastJsonFlatDataCodec"/>
+    <dct:data-coding-handler/>
+    <dct:data-coding-qos/>
+</beans>
 ```
 
-### 自定义值编解码器
+### 任意数量的实例模式
 
-#### 开发
-
-`dwarfeng-dct` 项目中的 `ValueCodec` 接口定义了值编解码器的基本功能，开发人员可以通过实现该接口，
-自定义值编解码器。扩展的编解码器可以扩展 `Data` 的值的支持类型。
-
-建议在实现 `ValueCodec` 接口的同时，继承 `AbstractValueCodec` 类，该类对通用的业务逻辑进行了封装，如异常处理等。
-继承 `AbstractValueCodec` 类可以使开发人员更加专注于编解码业务的实现。
-
-```java
-import com.dwarfeng.dct.handler.vc.AbstractValueCodec;
-
-import javax.annotation.Nonnull;
-
-@SuppressWarnings("RedundantThrows")
-public class CustomValueCodec extends AbstractValueCodec {
-
-    @Nonnull
-    @Override
-    protected String doEncode(@Nonnull Object target) throws Exception {
-        // 实现解码逻辑，而不需要关注异常处理。
-        return xxx;
-    }
-
-    @Nonnull
-    @Override
-    protected Object doDecode(@Nonnull String text) throws Exception {
-        // 实现解码逻辑，而不需要关注异常处理。
-        return xxx;
-    }
-}
-```
-
-#### 使用
-
-在构造 `ValueCodingHandlerImpl` 时，将自定义的 `ValueCodec` 作为 `ValueCodingConfig` 中的配置项传入即可，使用
-`ValueCodingConfig.Builder` 可以使这一过程更加简单。
-
-```java
-import com.dwarfeng.dct.handler.ValueCodingHandler;
-import com.dwarfeng.dct.handler.ValueCodingHandlerImpl;
-import com.dwarfeng.dct.struct.ValueCodingConfig;
-import org.springframework.context.annotation.Configuration;
-
-@SuppressWarnings({"SpringFacetCodeInspection", "RedundantSuppression"})
-@Configuration
-public class CustomConfiguration {
-
-    @Bean
-    public ValueCodingHandler valueCodingHandler() {
-        // 开发人员自己实现的 ValueCodec。
-        CustomValueCodec customValueCodec = new CustomValueCodec();
-        ValueCodingConfig config = new ValueCodingConfig.Builder()
-                .addCodec(someValueCodec1)
-                .addCodec(someValueCodec2)
-                .addCodec(someValueCodec3)
-                .addCodec(customValueCodec)
-                .build();
-        return new ValueCodingHandlerImpl(config);
-    }
-}
-```
+自行设计 `DataCodingHandler` 与 `ValueCodingHandler` 的工厂类，调用相关工厂方法生成处理器实例，并按需注册到 Spring 容器中。
+当前默认实现 `DataCodingHandlerImpl` 与 `ValueCodingHandlerImpl` 均通过配置对象工作，可按需创建不同配置的实例。
