@@ -4,6 +4,13 @@
 
 ### 功能构建
 
+- 新增 spring-telqos 框架集成指令。
+  - com.dwarfeng.dct.api.integration.springtelqos.DataCodingCommand。
+  - com.dwarfeng.dct.api.integration.springtelqos.ValueCodingCommand。
+
+- 增加依赖。
+  - 增加依赖 `spring-telqos` 以应用其新功能，版本为 `2.0.1.a`。
+
 - 为项目增加 xsd 配置机制。
   - 增加 `META-INF/dwarfeng-dct.xsd` 文件。
   - 增加 `com.dwarfeng.dct.node.configuration.DctNamespaceHandler` 及对应的定义解析器。
