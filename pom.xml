@@ -10,7 +10,7 @@
 
     <groupId>com.dwarfeng</groupId>
     <artifactId>dwarfeng-dct</artifactId>
-    <version>3.0.1.a-SNAPSHOT</version>
+    <version>3.0.1.a</version>
 
     <packaging>pom</packaging>
 
@@ -325,12 +325,12 @@
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>dwarfeng-dct-core</artifactId>
-                <version>3.0.1.a-SNAPSHOT</version>
+                <version>3.0.1.a</version>
             </dependency>
             <dependency>
                 <groupId>com.dwarfeng</groupId>
                 <artifactId>dwarfeng-dct-api</artifactId>
-                <version>3.0.1.a-SNAPSHOT</version>
+                <version>3.0.1.a</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
