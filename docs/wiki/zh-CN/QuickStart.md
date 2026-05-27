@@ -1,4 +1,4 @@
-# Quick Start - 快速开始
+﻿# Quick Start - 快速开始
 
 本文档帮助您用最少的步骤体验 `dwarfeng-dct` 的数据编码与解码能力。
 
@@ -14,59 +14,76 @@
 在项目的 `pom.xml` 中添加如下依赖：
 
 ```xml
-<dependency>
-    <groupId>com.dwarfeng</groupId>
-    <artifactId>dwarfeng-dct</artifactId>
-    <version>${dwarfeng-dct.version}</version>
-</dependency>
-```
-
-## 最小化 Spring 配置
-
-最简单的使用方式是扫描 `com.dwarfeng.dct.configuration` 包。该配置会注册默认的 `ValueCodingHandler`、
-`DataCodingHandler` 以及内置的值编解码器和 `FastJsonFlatDataCodec`。
-
-```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<!--suppress SpringFacetInspection -->
-<beans
-        xmlns:context="http://www.springframework.org/schema/context"
+
+<!--suppress MavenModelInspection, MavenModelVersionMissed -->
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="http://www.springframework.org/schema/beans"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+        http://maven.apache.org/xsd/maven-4.0.0.xsd"
 >
 
-    <context:component-scan base-package="com.dwarfeng.dct.configuration"/>
-</beans>
+    <!-- 省略其他配置 -->
+    <dependencies>
+        <!-- 省略其他配置 -->
+        <dependency>
+            <groupId>com.dwarfeng</groupId>
+            <artifactId>dwarfeng-dct-core</artifactId>
+            <version>${dwarfeng-dct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dwarfeng</groupId>
+            <artifactId>dwarfeng-dct-api</artifactId>
+            <version>${dwarfeng-dct.version}</version>
+        </dependency>
+        <!-- 省略其他配置 -->
+    </dependencies>
+    <!-- 省略其他配置 -->
+</project>
 ```
 
 ## 最小示例
 
-完成 Spring 配置后，即可获取 `DataCodingHandler` 对象进行编码与解码。
+完成依赖引入后，即可使用 `GeneralData` 与 `DataCodingHandler` 完成最小数据编解码链路。
 
 ```java
-import com.dwarfeng.dct.bean.dto.GeneralData;
-import com.dwarfeng.dct.handler.DataCodingHandler;
-import com.dwarfeng.dct.struct.Data;
+import com.dwarfeng.dct.impl.handler.DataCodingHandlerImpl;
+import com.dwarfeng.dct.impl.handler.ValueCodingHandlerImpl;
+import com.dwarfeng.dct.impl.handler.fdc.FastJsonFlatDataCodec;
+import com.dwarfeng.dct.impl.handler.vc.IntegerValueCodec;
+import com.dwarfeng.dct.stack.bean.dto.GeneralData;
+import com.dwarfeng.dct.stack.handler.DataCodingHandler;
+import com.dwarfeng.dct.stack.handler.ValueCodec;
+import com.dwarfeng.dct.stack.handler.ValueCodingHandler;
+import com.dwarfeng.dct.stack.struct.Data;
+import com.dwarfeng.dct.stack.struct.DataCodingConfig;
+import com.dwarfeng.dct.stack.struct.ValueCodingConfig;
 import com.dwarfeng.subgrade.stack.bean.key.LongIdKey;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
-@SuppressWarnings("UnnecessaryModifier")
 public class QuickStartExample {
 
+    @SuppressWarnings("UnnecessaryModifier")
     public static void main(String[] args) throws Exception {
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
-                "classpath:spring/application-context*.xml"
-        );
-        ctx.registerShutdownHook();
-        ctx.start();
+        // 构造值编解码处理器。
+        List<ValueCodec> valueCodecs = Collections.singletonList(new IntegerValueCodec());
+        ValueCodingConfig valueCodingConfig = new ValueCodingConfig.Builder()
+                .addCodecs(valueCodecs)
+                .addPreCacheClass(Integer.class)
+                .addPreCachePrefix("integer")
+                .build();
+        ValueCodingHandler valueCodingHandler = new ValueCodingHandlerImpl(valueCodingConfig);
 
-        DataCodingHandler dataCodingHandler = ctx.getBean(DataCodingHandler.class);
+        // 构造数据编解码处理器。
+        DataCodingConfig dataCodingConfig = new DataCodingConfig.Builder()
+                .setFlatDataCodec(new FastJsonFlatDataCodec())
+                .setValueCodingHandler(valueCodingHandler)
+                .build();
+        DataCodingHandler dataCodingHandler = new DataCodingHandlerImpl(dataCodingConfig);
 
         // 构造一条原始数据。
         GeneralData origin = new GeneralData(new LongIdKey(12450L), 42, new Date());
@@ -75,12 +92,10 @@ public class QuickStartExample {
         String encoded = dataCodingHandler.encode(origin);
         System.out.println("编码结果: " + encoded);
 
-        // 解码为数据对象。
+        // 从文本解码为数据对象。
         Data decoded = dataCodingHandler.decode(encoded);
         System.out.println("解码结果: " + decoded);
-
-        ctx.stop();
-        ctx.close();
+        System.out.println("解码 pointLongId: " + decoded.getPointKey().getLongId());
     }
 }
 ```
@@ -88,30 +103,19 @@ public class QuickStartExample {
 运行后，您会看到类似如下风格的文本：
 
 ```text
-{"point_key":{"long_id":12450},"value":"integer:42","happened_date":...,"happened_date_nano_offset":0}
+编码结果: {"point_key":{"long_id":12450},"value":"integer:42","happened_date": ...
+解码结果: GeneralData{pointKey=LongIdKey{longId=12450}, value=42, happenedDate= ...
+解码 pointLongId: 12450
 ```
 
 这说明 `dwarfeng-dct` 已经完成了如下工作：
 
-1. 将原始值 `42` 编码为带类型前缀的扁平值 `integer:42`。
-2. 将点位、扁平值、发生时间与毫秒内纳秒偏移一起封装为最终文本。
-3. 在解码时恢复出原始的数据对象及其值类型，并保留高精度时间语义。
-
-兼容性提示：
-
-- 对于历史报文，若缺少 `happened_date_nano_offset` 字段，解码时会按默认值 `0` 处理。
-
-## 运行项目示例
-
-如果您想直接体验项目中自带的演示程序，可以运行：
-
-- `com.dwarfeng.dct.example.DataCodingExample` - 数据编码器使用示例。
-- `com.dwarfeng.dct.example.ValueCodingExample` - 值编码器使用示例。
-
-项目示例位于 `src/test`，会加载 `classpath:spring/application-context*.xml` 对应的测试 Spring 配置。
+1. 将 `GeneralData` 按默认规则编码为 JSON 文本。
+2. 使用 `point_key`、`value`、`happened_date`、`happened_date_nano_offset` 作为消息字段名。
+3. 在解码时将文本恢复为 `Data` 对象，并将 `integer:42` 恢复为 `Integer` 值。
 
 ## 下一步
 
-- 参阅 [FlatData Mechanism](./FlatDataMechanism.md) 了解扁平数据的结构与语义。
-- 参阅 [GeneralData Mechanism](./GeneralDataMechanism.md) 了解通用数据的组织方式。
-- 如需扩展值类型支持，可参阅 [Extend ValueCodec](./ExtendValueCodec.md)。
+- [FlatData Mechanism](./FlatDataMechanism.md) - dwarfeng-dct 的扁平数据机制说明，介绍 JSON 字段结构和编解码语义。
+- [GeneralData Mechanism](./GeneralDataMechanism.md) - dwarfeng-dct 的通用数据机制说明，介绍数据对象结构和时间精度模型。
+- [Extend ValueCodec](./ExtendValueCodec.md) - dwarfeng-dct 的值编解码扩展说明，介绍如何支持自定义对象类型。
