@@ -1,31 +1,33 @@
 # dwarfeng-dct
 
-数据编码与传输服务。
-
-Data Coding and Transmission for DwArFeng
-
-该项目提供通用的数据编码与传输能力，将带点位、时间和值的数据编码为文本，并支持从文本还原数据，项目基于 `subgrade` 构建。
+DwArFeng 的数据编码与传输服务，基于 `subgrade` 底座开发，提供通用的数据编码、值编码与文本传输能力，
+支持将带点位、时间和值的数据编码为文本，并支持从文本还原数据。
 
 ---
 
 ## 特性
 
-1. 标准数据结构：`Data`、`GeneralData`、`FlatData`（毫秒时间基线 + 毫秒内纳秒偏移）。
-2. 基于 FastJson 的默认 JSON 数据格式（`point_key`、`value`、`happened_date`、`happened_date_nano_offset`）。
-3. 值编解码器体系：`ValueCodingHandler`、`ValueCodec`，支持常见基础类型与可序列化对象。
-4. 数据编解码器体系：`DataCodingHandler`、`FlatDataCodec`，支持数据对象与文本的互相转换。
-5. Subgrade 架构支持：`DataCodingQosService`、`ValueCodingQosService` 及对应实现。
-6. Spring 简单配置：`com.dwarfeng.dct.node.configuration.SimpleConfiguration`。
-7. XSD 命名空间装配（`3.0.0.a` 起）。
+1. Subgrade 架构支持。
+2. 标准数据结构支持：`Data`、`GeneralData`、`FlatData`。
+3. 数据编码与数据解码，支持数据对象与文本的互相转换。
+4. 值编码与值解码，支持常见基础类型与可序列化对象。
+5. 基于 FastJson 的默认 JSON 数据格式。
+6. 支持通过 `DataCodingQosService` 与 `ValueCodingQosService` 统一访问数据编码与值编码能力。
+7. 支持 Spring XML XSD 命名空间配置。
 8. `dwarfeng-dct-api` 模块提供 spring-telqos 集成（`DataCodingCommand`、`ValueCodingCommand`）。
 
-运行下列示例以观察主要特性：
+运行 `dwarfeng-dct-core/src/test` 下的示例以观察核心特性。
 
-| 所在模块              | 示例类名                                                     | 说明          |
-|-------------------|----------------------------------------------------------|-------------|
-| dwarfeng-dct-api  | `com.dwarfeng.dct.api.integration.example.TelqosExample` | Telqos 集成示例 |
-| dwarfeng-dct-core | `com.dwarfeng.dct.node.example.DataCodingExample`        | 数据编码示例      |
-| dwarfeng-dct-core | `com.dwarfeng.dct.node.example.ValueCodingExample`       | 值编码示例       |
+| 示例类名                                             | 说明                       |
+|--------------------------------------------------|--------------------------|
+| com.dwarfeng.dct.node.example.DataCodingExample  | 数据编码示例：演示数据对象与文本之间的编码和解码 |
+| com.dwarfeng.dct.node.example.ValueCodingExample | 值编码示例：演示常见值类型与文本之间的编码和解码 |
+
+运行 `dwarfeng-dct-api/src/test` 下的示例以观察 API 扩展特性。
+
+| 示例类名                                                   | 说明                                |
+|--------------------------------------------------------|-----------------------------------|
+| com.dwarfeng.dct.api.integration.example.TelqosExample | Telqos 示例：通过运维指令操作数据编码与值编码 QoS 服务 |
 
 ## 文档
 
@@ -136,9 +138,9 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 
 3. 项目引入。
 
-   在项目的 `pom.xml` 中添加如下依赖：
+   根工程坐标为 `com.dwarfeng:dwarfeng-dct`。在业务项目中使用时，通常按需要引入具体模块。
 
-   `dwarfeng-dct-core` 提供核心 DTO、工具类与 Handler 实现，为大多数场景的必选依赖：
+   如果只需要核心数据编码与值编码能力，在项目的 `pom.xml` 中添加如下依赖：
 
    ```xml
    <dependency>
@@ -148,7 +150,7 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
    </dependency>
    ```
 
-   如需使用 spring-telqos 命令行集成，可额外引入 `dwarfeng-dct-api`：
+   如果需要 spring-telqos 运维指令能力，在项目的 `pom.xml` 中添加如下依赖：
 
    ```xml
    <dependency>
@@ -162,12 +164,13 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 
 ## 如何使用
 
-1. 运行 `dwarfeng-dct-api/src/test` 或 `dwarfeng-dct-core/src/test` 下的示例与测试以观察主要特性。
-2. 观察项目结构，将其中的配置运用到其它的 subgrade 项目中。
+1. 运行 `dwarfeng-dct-core/src/test` 下的 `Example` 以观察核心特性。
+2. 运行 `dwarfeng-dct-api/src/test` 下的 `Example` 以观察 spring-telqos 运维指令特性。
+3. 观察项目结构，将其中的配置运用到其它的 subgrade 项目中。
 
-### 单例模式
+### 单实例模式
 
-加载 `com.dwarfeng.dct.node.configuration.SimpleConfiguration`，即可获得单例模式的 `DataCodingHandler`、
+加载 `com.dwarfeng.dct.node.configuration.SimpleConfiguration`，即可获得单实例模式的 `DataCodingHandler`、
 `ValueCodingHandler`、`DataCodingQosHandler`、`ValueCodingQosHandler`、`DataCodingQosService` 与 `ValueCodingQosService`。
 在项目的 `application-context-scan.xml` 中追加 `com.dwarfeng.dct.node.configuration` 包中全部 bean 的扫描，示例如下:
 
@@ -218,7 +221,7 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 
 ### 多实例模式
 
-不使用简单配置，使用 xml 或者配置类生成多个 `DataCodingHandlerImpl` 与 `ValueCodingHandlerImpl` 实例。  
+不使用简单配置，使用 xml 或者配置类生成多个 `DataCodingHandlerImpl` 与 `ValueCodingHandlerImpl` 实例。
 在项目的 `bean-definition.xml` 中追加配置，示例如下:
 
 ```xml
@@ -293,7 +296,7 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 
 ### XSD 配置
 
-从 `3.0.0.a` 版本开始，可以使用 `dct` 命名空间装配 `DataCodingHandler`、`ValueCodingHandler` 与对应 QoS 服务。  
+从 `3.0.0.a` 版本开始，可以使用 `dct` 命名空间装配 `DataCodingHandler`、`ValueCodingHandler` 与对应 QoS 服务。
 在项目的 `application-context-dct.xml` 中追加配置，示例如下:
 
 ```xml

@@ -4,6 +4,11 @@
 
 ### 功能构建
 
+- 更新 README.md。
+
+- Wiki 更新。
+  - docs/wiki/zh-CN/Introduction.md。
+
 - 优化单元测试。
   - com.dwarfeng.dct.impl.handler.DataCodingQosHandlerImplTest。
   - com.dwarfeng.dct.impl.handler.ValueCodingQosHandlerImplTest。
