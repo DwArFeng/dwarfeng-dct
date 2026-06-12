@@ -4,6 +4,10 @@
 
 ### 功能构建
 
+- 优化单元测试。
+  - com.dwarfeng.dct.impl.handler.DataCodingQosHandlerImplTest。
+  - com.dwarfeng.dct.impl.handler.ValueCodingQosHandlerImplTest。
+
 - `dwarfeng-dct-api` 子模块类优化注释、文档注释格式、代码换行格式。
   - com.dwarfeng.dct.api.integration.configuration.ServiceExceptionMapperConfiguration。
 

@@ -11,6 +11,10 @@ import com.dwarfeng.subgrade.stack.bean.key.LongIdKey;
 import com.dwarfeng.subgrade.stack.exception.HandlerException;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -24,7 +28,13 @@ import java.util.Map;
  * @author DwArFeng
  * @since 3.0.0
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:spring/application-context*.xml")
 public class DataCodingQosHandlerImplTest {
+
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+    private DataCodingQosHandler dataCodingQosHandler;
 
     @Test
     public void testEmptyMapThrowsNoHandlerPresent() throws HandlerException {
@@ -38,13 +48,10 @@ public class DataCodingQosHandlerImplTest {
 
     @Test
     public void testNullHandlerNameWithSingleHandler() throws HandlerException {
-        StubDataCodingHandler handler = new StubDataCodingHandler();
-        Map<String, DataCodingHandler> map = new HashMap<>();
-        map.put("h1", handler);
-        DataCodingQosHandler qosHandler = new DataCodingQosHandlerImpl(map);
-
-        String encoded = qosHandler.encode(null, new GeneralData(new LongIdKey(1L), "v", new java.util.Date(0L), 0));
-        Data decoded = qosHandler.decode(null, encoded);
+        String encoded = dataCodingQosHandler.encode(
+                null, new GeneralData(new LongIdKey(1L), "v", new java.util.Date(0L), 0)
+        );
+        Data decoded = dataCodingQosHandler.decode(null, encoded);
 
         Assert.assertEquals("v", decoded.getValue());
     }

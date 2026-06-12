@@ -8,6 +8,10 @@ import com.dwarfeng.dct.stack.handler.ValueCodingQosHandler;
 import com.dwarfeng.subgrade.stack.exception.HandlerException;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -21,7 +25,13 @@ import java.util.Map;
  * @author DwArFeng
  * @since 3.0.0
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:spring/application-context*.xml")
 public class ValueCodingQosHandlerImplTest {
+
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+    private ValueCodingQosHandler valueCodingQosHandler;
 
     @Test
     public void testEmptyMapThrowsNoHandlerPresent() throws HandlerException {
@@ -35,13 +45,8 @@ public class ValueCodingQosHandlerImplTest {
 
     @Test
     public void testNullHandlerNameWithSingleHandler() throws HandlerException {
-        StubValueCodingHandler handler = new StubValueCodingHandler();
-        Map<String, ValueCodingHandler> map = new HashMap<>();
-        map.put("h1", handler);
-        ValueCodingQosHandler qosHandler = new ValueCodingQosHandlerImpl(map);
-
-        String encoded = qosHandler.encode(null, "v");
-        Object decoded = qosHandler.decode(null, encoded);
+        String encoded = valueCodingQosHandler.encode(null, "v");
+        Object decoded = valueCodingQosHandler.decode(null, encoded);
 
         Assert.assertEquals("v", decoded);
     }
