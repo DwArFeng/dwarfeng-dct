@@ -11,7 +11,7 @@
     <parent>
         <artifactId>dwarfeng-dct</artifactId>
         <groupId>com.dwarfeng</groupId>
-        <version>3.0.1.a</version>
+        <version>3.0.2.a-SNAPSHOT</version>
     </parent>
 
     <artifactId>dwarfeng-dct-core</artifactId>
