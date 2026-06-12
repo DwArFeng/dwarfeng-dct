@@ -49,7 +49,9 @@ public class ValueCodingQosDefinitionParser implements BeanDefinitionParser {
         BeanDefinitionBuilder valueCodingQosHandlerBuilder = BeanDefinitionBuilder.rootBeanDefinition(
                 ValueCodingQosHandlerImpl.class
         );
-        valueCodingQosHandlerBuilder.getRawBeanDefinition().setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
+        valueCodingQosHandlerBuilder.getRawBeanDefinition().setAutowireMode(
+                AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR
+        );
         ConstructorArgumentValues valueCodingQosHandlerConstructorArgumentValues = new ConstructorArgumentValues();
         valueCodingQosHandlerConstructorArgumentValues.addIndexedArgumentValue(0, valueCodingHandlerMap);
         valueCodingQosHandlerBuilder.getRawBeanDefinition().setConstructorArgumentValues(
@@ -64,7 +66,9 @@ public class ValueCodingQosDefinitionParser implements BeanDefinitionParser {
         BeanDefinitionBuilder valueCodingQosServiceBuilder = BeanDefinitionBuilder.rootBeanDefinition(
                 ValueCodingQosServiceImpl.class
         );
-        valueCodingQosServiceBuilder.getRawBeanDefinition().setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
+        valueCodingQosServiceBuilder.getRawBeanDefinition().setAutowireMode(
+                AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR
+        );
         ConstructorArgumentValues valueCodingQosServiceConstructorArgumentValues = new ConstructorArgumentValues();
         valueCodingQosServiceConstructorArgumentValues.addIndexedArgumentValue(
                 0, new RuntimeBeanReference(qosHandlerName)
@@ -77,7 +81,9 @@ public class ValueCodingQosDefinitionParser implements BeanDefinitionParser {
         );
         valueCodingQosServiceBuilder.setScope(BeanDefinition.SCOPE_SINGLETON);
         valueCodingQosServiceBuilder.setLazyInit(false);
-        parserContext.getRegistry().registerBeanDefinition(serviceName, valueCodingQosServiceBuilder.getBeanDefinition());
+        parserContext.getRegistry().registerBeanDefinition(
+                serviceName, valueCodingQosServiceBuilder.getBeanDefinition()
+        );
 
         return null;
     }

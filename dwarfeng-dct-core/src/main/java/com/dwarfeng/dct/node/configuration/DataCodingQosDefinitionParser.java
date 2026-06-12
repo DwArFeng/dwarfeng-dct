@@ -77,7 +77,9 @@ public class DataCodingQosDefinitionParser implements BeanDefinitionParser {
         );
         dataCodingQosServiceBuilder.setScope(BeanDefinition.SCOPE_SINGLETON);
         dataCodingQosServiceBuilder.setLazyInit(false);
-        parserContext.getRegistry().registerBeanDefinition(serviceName, dataCodingQosServiceBuilder.getBeanDefinition());
+        parserContext.getRegistry().registerBeanDefinition(
+                serviceName, dataCodingQosServiceBuilder.getBeanDefinition()
+        );
 
         return null;
     }

@@ -46,8 +46,7 @@ public class ServiceExceptionHelperTest {
 
     @Test
     public void testPutDefaultDestinationWithNullMap() {
-        Map<Class<? extends Exception>, ServiceException.Code> map =
-                ServiceExceptionHelper.putDefaultDestination(null);
+        Map<Class<? extends Exception>, ServiceException.Code> map = ServiceExceptionHelper.putDefaultDestination(null);
         Assert.assertNotNull(map);
         Assert.assertEquals(16, map.size());
     }

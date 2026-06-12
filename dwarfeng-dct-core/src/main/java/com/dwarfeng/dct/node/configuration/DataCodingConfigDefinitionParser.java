@@ -33,7 +33,9 @@ public class DataCodingConfigDefinitionParser implements BeanDefinitionParser {
 
         BeanDefinitionParserUtil.makeSureBeanNameNotDuplicated(parserContext, configName);
 
-        RootBeanDefinition dataCodingConfigBuilderBeanDefinition = new RootBeanDefinition(DataCodingConfig.Builder.class);
+        RootBeanDefinition dataCodingConfigBuilderBeanDefinition = new RootBeanDefinition(
+                DataCodingConfig.Builder.class
+        );
         dataCodingConfigBuilderBeanDefinition.getPropertyValues().add(
                 "flatDataCodec", new RuntimeBeanReference(flatDataCodecRef)
         );
