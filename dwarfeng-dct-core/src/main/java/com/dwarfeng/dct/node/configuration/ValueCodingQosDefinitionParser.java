@@ -4,12 +4,10 @@ import com.dwarfeng.dct.impl.handler.ValueCodingQosHandlerImpl;
 import com.dwarfeng.dct.impl.service.ValueCodingQosServiceImpl;
 import com.dwarfeng.dct.sdk.util.BeanDefinitionParserUtil;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanReference;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
@@ -27,35 +25,24 @@ public class ValueCodingQosDefinitionParser implements BeanDefinitionParser {
     @SuppressWarnings("DuplicatedCode")
     @Override
     public BeanDefinition parse(Element element, @Nonnull ParserContext parserContext) {
-        String serviceName = (String) BeanDefinitionParserUtil.mayResolveSpel(
-                parserContext, element.getAttribute("service-name")
-        );
         String qosHandlerName = (String) BeanDefinitionParserUtil.mayResolveSpel(
                 parserContext, element.getAttribute("qos-handler-name")
         );
-        String handlerRef = (String) BeanDefinitionParserUtil.mayResolveSpel(
-                parserContext, element.getAttribute("handler-ref")
+        String qosServiceName = (String) BeanDefinitionParserUtil.mayResolveSpel(
+                parserContext, element.getAttribute("qos-service-name")
         );
         String semRef = (String) BeanDefinitionParserUtil.mayResolveSpel(
                 parserContext, element.getAttribute("sem-ref")
         );
 
         BeanDefinitionParserUtil.makeSureBeanNameNotDuplicated(parserContext, qosHandlerName);
-        BeanDefinitionParserUtil.makeSureBeanNameNotDuplicated(parserContext, serviceName);
-
-        ManagedMap<String, BeanReference> valueCodingHandlerMap = new ManagedMap<>();
-        valueCodingHandlerMap.put(handlerRef, new RuntimeBeanReference(handlerRef));
+        BeanDefinitionParserUtil.makeSureBeanNameNotDuplicated(parserContext, qosServiceName);
 
         BeanDefinitionBuilder valueCodingQosHandlerBuilder = BeanDefinitionBuilder.rootBeanDefinition(
                 ValueCodingQosHandlerImpl.class
         );
         valueCodingQosHandlerBuilder.getRawBeanDefinition().setAutowireMode(
                 AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR
-        );
-        ConstructorArgumentValues valueCodingQosHandlerConstructorArgumentValues = new ConstructorArgumentValues();
-        valueCodingQosHandlerConstructorArgumentValues.addIndexedArgumentValue(0, valueCodingHandlerMap);
-        valueCodingQosHandlerBuilder.getRawBeanDefinition().setConstructorArgumentValues(
-                valueCodingQosHandlerConstructorArgumentValues
         );
         valueCodingQosHandlerBuilder.setScope(BeanDefinition.SCOPE_SINGLETON);
         valueCodingQosHandlerBuilder.setLazyInit(false);
@@ -82,7 +69,7 @@ public class ValueCodingQosDefinitionParser implements BeanDefinitionParser {
         valueCodingQosServiceBuilder.setScope(BeanDefinition.SCOPE_SINGLETON);
         valueCodingQosServiceBuilder.setLazyInit(false);
         parserContext.getRegistry().registerBeanDefinition(
-                serviceName, valueCodingQosServiceBuilder.getBeanDefinition()
+                qosServiceName, valueCodingQosServiceBuilder.getBeanDefinition()
         );
 
         return null;

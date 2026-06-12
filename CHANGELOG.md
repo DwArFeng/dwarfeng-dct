@@ -20,7 +20,10 @@
 
 ### Bug 修复
 
-- (无)
+- 基于 XSD 的 XML 配置修复。
+  - 修复 `DataCodingQosDefinitionParser` 中错误的 XML 解析逻辑。
+  - 修复 `ValueCodingQosDefinitionParser` 中错误的 XML 解析逻辑。
+  - 修复 `META-INF/dwarfeng-dct.xsd` 中错误的标签属性定义。
 
 ### 功能移除
 

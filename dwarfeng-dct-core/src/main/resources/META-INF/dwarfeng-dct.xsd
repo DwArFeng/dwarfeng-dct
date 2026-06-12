@@ -290,7 +290,7 @@
         </xsd:annotation>
         <xsd:complexType>
             <xsd:attribute
-                    name="service-name"
+                    name="qos-service-name"
                     type="xsd:token"
                     default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_VALUE_CODING_QOS_SERVICE_NAME}"
             >
@@ -317,22 +317,6 @@
                     <xsd:appinfo>
                         <tool:annotation>
                             <tool:expected-type type="java.lang.String"/>
-                        </tool:annotation>
-                    </xsd:appinfo>
-                </xsd:annotation>
-            </xsd:attribute>
-            <xsd:attribute
-                    name="handler-ref"
-                    type="xsd:string"
-                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_VALUE_CODING_HANDLER_NAME}"
-            >
-                <xsd:annotation>
-                    <xsd:documentation>
-                        <![CDATA[ValueCodingHandler 的 bean 引用，默认为 valueCodingHandler。]]>
-                    </xsd:documentation>
-                    <xsd:appinfo>
-                        <tool:annotation kind="ref">
-                            <tool:expected-type type="com.dwarfeng.dct.stack.handler.ValueCodingHandler"/>
                         </tool:annotation>
                     </xsd:appinfo>
                 </xsd:annotation>
@@ -369,7 +353,7 @@
         </xsd:annotation>
         <xsd:complexType>
             <xsd:attribute
-                    name="service-name"
+                    name="qos-service-name"
                     type="xsd:token"
                     default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_DATA_CODING_QOS_SERVICE_NAME}"
             >
@@ -396,22 +380,6 @@
                     <xsd:appinfo>
                         <tool:annotation>
                             <tool:expected-type type="java.lang.String"/>
-                        </tool:annotation>
-                    </xsd:appinfo>
-                </xsd:annotation>
-            </xsd:attribute>
-            <xsd:attribute
-                    name="handler-ref"
-                    type="xsd:string"
-                    default="#{T(com.dwarfeng.dct.sdk.util.Constants).XSD_DEFAULT_DATA_CODING_HANDLER_NAME}"
-            >
-                <xsd:annotation>
-                    <xsd:documentation>
-                        <![CDATA[DataCodingHandler 的 bean 引用，默认为 dataCodingHandler。]]>
-                    </xsd:documentation>
-                    <xsd:appinfo>
-                        <tool:annotation kind="ref">
-                            <tool:expected-type type="com.dwarfeng.dct.stack.handler.DataCodingHandler"/>
                         </tool:annotation>
                     </xsd:appinfo>
                 </xsd:annotation>
